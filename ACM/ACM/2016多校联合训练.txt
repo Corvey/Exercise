@@ -1,0 +1,204 @@
+2016-07-19 Multi-University Training Contest 1
+
+5723	Abandoned country(done)
+	最小生成树 + DFS求任意两点距离期望值
+	
+5724	Chess
+	博弈论，n行20列的棋盘，对于每行，如果当前棋子右边没棋子，那可以直接放到右边，如果有就跳过放到其后面的第一个空位子，A先操作，最后谁无法操作则输，给定每行棋子状态，问先手是否必胜
+	
+5725	Game
+	n*m的图上有一些守卫，守卫的位置，满足彼此不同行，不同列，且相邻8格内不会有其他守卫，现等概率的选取起点和终点，所有可以不碰守卫可以到达的路径中，最短路径的期望。
+	
+5726	GCD(done)ZKW线段树+二分
+
+	给定区间求最大公约数，以及有多少个区间的最大公约数与此相等
+	
+5727	Necklace(done) 环排列+匈牙利算法
+	阴阳宝石各n个，串成阴阳相间的环。给定m种搭配，表示某阳宝石与某阴宝石相邻时会变暗。问最少有多少阳宝石会变暗
+	
+5728	PowMod
+	数论
+
+5729	Rigid Frameworks(done) 组合计数
+	左边有n个点，右边有m个点的二分图，问有多少种添加最少的边的方案使得图联通
+
+5730	Shell Necklace
+	分治fft，玄学
+
+5731	Solid Dominoes Tilings
+	轮廓线DP + 容斥
+
+5732	Subway
+	给定两棵同构的树，要求输出对应的点对。 
+
+5733	tetrahedron(done)
+	给定四个点，求是否能组成四面体，若能则求四面体内切球半径及球心
+
+2016-07-21 Multi-University Training Contest 2
+
+5734	Acperience(done)
+	水题
+	
+5735	Born Slippy
+	
+5736	Call It What You Want
+
+5737	Differencia
+
+5738	Eureka
+
+5739	Fantasia
+
+5740	Glorious Brilliance
+
+5741	Helter Skelter
+
+5742	It's All In The Mind(done)
+	水题
+	
+5743	Join The Future
+
+5744	Keep On Movin
+	水题
+	
+5745	La Vie en rose(done)
+	奇淫巧技
+	
+5746	Memento Mori
+
+2016-07-26 Multi-University Training Contest 3
+
+5752	Sqrt Bo(done)
+	水题
+	
+5753	Permutation Bo(done)
+	水题
+	
+5754	Life Winner Bo
+	博弈论，n*m棋盘，国王、马、车、皇后四种棋其中一种，从(1,1)走到(n,m)，先到先赢，不能走则平局
+	
+5755	Gambler Bo(done) 高斯消元+解同余方程组
+	开关问题，012三种状态，给定一个局面，求变成全0的操作步骤
+	
+5756	Boss Bo
+
+5757	Product Bo
+
+5758	Explorer Bo
+	给定最小生成树，求最小链覆盖
+
+5759	Gardener Bo
+
+5760	Palindrome Bo
+
+5761	Rower Bo
+	小船从(0,a)以v1速度总向着原点方向行走，水流速度v2向着x轴正半轴，求到达原点时间
+
+5762	Teacher Bo(done)
+	水题
+
+2016-07-28 Multi-University Training Contest 4
+
+5763	Another Meaning
+	字符串匹配 + DP
+	
+5764	After a Sleepless Night
+
+5765	Bonds
+
+5766	Filling
+
+5768	Lucky7
+
+5769	Substring
+
+5770	Treasure 
+
+5771	Turn Game
+
+5772	String problem
+
+5773	The All-purpose Zero
+	
+5774	Where Amazing Happens(done)
+	水题
+5775	Bubble Sort(done)
+	给定1~n的一种排列，求个数字在冒泡排序过程中到达的最右位置和最左位置之差。
+	
+2016-08-02 Multi-University Training Contest 5
+
+5781	ATM Mechine
+
+5782	Cycle
+
+5783	Divide the Sequence(done) 贪心
+	水题
+	
+5784	How Many Triangles
+
+5785	Interesting
+
+5786	Interval
+
+5787	K-wolf Number
+
+5788	Level Up
+
+5789	Permutation
+
+5790	Prefix
+
+5791	Two
+
+5792	World is Exploding(done) 离散化+树状数组
+	给一个长度n的序列A，问有多少四元组(a,b,c,d)满足：4个数两两不同，1 <= a < b <= n，1 <= c < d <= n，A_a < A_b，A_c > A_d。
+
+2016-08-04 Multi-University Training Contest 6
+
+5793	 A Boring Question(done) 快速幂+费马小定理
+
+5794	 A Simple Chess
+
+5795	 A Simple Nim
+
+5796	 Magic Number
+
+5797	 Master Zhu
+
+5798	 Stabilization
+
+5799	 This world need more Zhu
+
+5800	 To My Girlfriend
+
+5801	 Up Sky,Mr.Zhu
+
+5802	 Windows 10
+
+5803	 Zhu’s Math Problem
+
+2016-08-09 Multi-University Training Contest 7
+
+5809	 Ants
+
+5810	 Balls and Boxes
+
+5811	 Colosseo
+
+5812	 Distance
+
+5813	 Elegant Construction
+
+5814	 Find the Period
+
+5815	 Golden Week
+
+5816	 Hearthstone
+
+5817	 Ice Walls
+
+5818	 Joint Stacks(done) 栈+双端队列
+
+5819	 Knights
+
+5820	 Lights
