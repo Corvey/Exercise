@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <math.h>
+int main(void)
+{
+    char str[20];
+    int hh1=0, mm1=0, ss1=0, hh2, mm2, ss2, v=0, time1=0, time2;
+    double s=0;
+    while(gets(str))
+    {
+        hh2 = (str[0]-'0')*10 + (str[1]-'0');
+        mm2 = (str[3]-'0')*10 + (str[4]-'0');
+        ss2 = (str[6]-'0')*10 + (str[7]-'0');
+        time2 = hh2*3600 + mm2*60 +ss2;
+        s += (double)(time2-time1)/3600*v;
+        if(!str[8])
+            printf("%s %.2lf km\n", str, s);
+        else
+        {
+            int count=0;
+            for(; str[9+count]; ++count);
+            v = 0;
+            for(int i=1; i<=count; ++i)
+                v += pow(10, i-1)*(str[9+count-i]-'0');
+        }
+        hh1 = hh2;
+        mm1 = mm2;
+        ss1 = ss2;
+        time1 = time2;
+    }
+}
