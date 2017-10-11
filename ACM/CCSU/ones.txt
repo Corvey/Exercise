@@ -1,0 +1,26 @@
+#include <stdio.h>
+int qwe(int a, int b, int n)
+{
+    int ans = 1;
+    for(int i=0; i<b; ++i)
+        ans = (ans*a)%n;
+    return ans;
+}
+int main(void)
+{
+    int n, res;
+    while(~scanf("%d", &n))
+    {
+        res = 0;
+        int x = 10%n;
+        for(int i=0; ; ++i)
+        {
+            res = (qwe(x, i, n) + res) % n;
+            if(!res)
+            {
+                printf("%d\n", i+1);
+                break;
+            }
+        }
+    }
+}

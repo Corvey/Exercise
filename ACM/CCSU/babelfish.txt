@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct str
+{
+    char s1[11];
+    char s2[11];
+}a[100001];
+
+int cmp(const void *a, const void *b)
+{
+    return strcmp((*(struct str *)a).s2, (*(struct str *)b).s2);
+}
+
+int HalfSearch(char *s, int left, int right)
+{
+    if(left > right)
+        return -1;
+    int mid = (left+right)/2;
+    int x = strcmp(s, a[mid].s2);
+    if(x > 0)
+        return HalfSearch(s, mid+1, right);
+    else if(x < 0)
+        return HalfSearch(s, left, mid-1);
+    else
+        return mid;
+}
+
+int main(void)
+{
+    int count=0;
+    for(; ; ++count)
+    {
+        if( (a[count].s1[0]=getchar()) == 10)
+            break;
+        scanf("%s %s", a[count].s1+1, a[count].s2);
+        getchar();
+    }
+    qsort(a, count, sizeof(struct str), cmp);
+    char s[11];
+    while(gets(s))
+    {
+        int x = HalfSearch(s, 0, count-1);
+        if(x == -1)
+            printf("eh\n");
+        else
+            printf("%s\n", a[x].s1);
+    }
+}
