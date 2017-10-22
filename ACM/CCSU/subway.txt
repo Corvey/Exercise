@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <math.h>
+#define N 250
+double side[N][N]={0};
+int vertex[N][N];
+int main(void)
+{
+    scanf("%d %d %d %d", &vertex[0][0], &vertex[0][1], &vertex[1][0], &vertex[1][1]);
+    int count = 2, start = count;
+    double x, y;
+    for(; ~scanf("%d %d", &vertex[count][0], &vertex[count][1]); ++count)
+    {
+        if(vertex[count][0] == -1 && vertex[count][1] == -1)
+        {
+            for(int i=start; i<count; ++i)
+            {
+                for(int j=i+1; j<count; ++j)
+                {
+                    x = (double)vertex[i][0]-vertex[j][0];
+                    y = (double)vertex[i][1]-vertex[j][1];
+                    side[i][j] = sqrt(x*x+y*y)*3/2000;
+                    side[j][i] = side[i][j];
+                }
+            }
+            start = count;
+            --count;
+        }
+    }
+    for(int i=0; i<count; ++i)
+    {
+        for(int j=0; j<count; ++j)
+        {
+            if(side[i][j])
+            {
+                //printf("%-8.2lf ", side[i][j]);
+                continue;
+            }
+            else if(i==j)
+                side[i][j] = 0x7fffffff;
+            else
+            {
+                x = (double)vertex[i][0]-vertex[j][0];
+                y = (double)vertex[i][1]-vertex[j][1];
+                side[i][j] = sqrt(x*x+y*y)*3/500;
+            }
+            //printf("%-8.2lf ", side[i][j]);
+        }
+        //printf("\n");
+    }
+    double D[N][N];
+    for(int i=0; i<count; ++i)
+    {
+        for(int j=0; j<count; ++j)
+        {
+            D[i][j] = side[i][j];
+        }
+    }
+    for(int i=0; i<count; ++i)
+    {
+        for(int j=0; j<count; ++j)
+        {
+            for(int k=0; k<count; ++k)
+            {
+                if(D[j][k] > D[j][i] + D[i][k])
+                {
+                    D[j][k] = D[j][i] + D[i][k];
+                }
+            }
+        }
+    }
+    /*
+    for(int i=0; i<count; ++i)
+    {
+        for(int j=0; j<count; ++j)
+        {
+            printf("%-5.0lf ", D[i][j]);
+        }
+        printf("\n");
+    }
+    */
+    printf("%.0lf\n", D[0][1]);
+}

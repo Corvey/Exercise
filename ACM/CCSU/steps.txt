@@ -1,0 +1,44 @@
+#include <stdio.h>
+int step(int l, int ll, int r, int rl, int count)
+{
+    if(r-l)
+    {
+        if(r-l >= ll+1)
+            l += ll+1, ++ll;
+        else if(r-l >= ll)
+            l += ll;
+        else if(r-l >= ll-1)
+            l += ll-1, --ll;
+        ++count;
+        printf("l:%d\n", l);
+    }
+    if(r-l)
+    {
+        if(r-l >= rl+1+ll-1)
+            r -= rl+1, ++rl;
+        else if(r-l >= rl+ll-1)
+            r -= rl;
+        else if(r-l >= rl-1)
+            r -= rl-1, --rl;
+        ++count;
+        printf("r:%d\n", r);
+    }
+    getch();
+    return r-l ? step(l, ll, r, rl, count) : count;
+}
+int main(void)
+{
+    int n, a, b;
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%d%d", &a, &b);
+        if(a > b)
+            a^=b, b^=a, a^=b;
+        if(b-a<=3)
+            printf("%d\n", b-a);
+        else
+            printf("%d\n", step(a+1, 1, b-1, 1, 2));
+    }
+    return 0;
+}
