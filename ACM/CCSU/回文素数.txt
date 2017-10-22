@@ -1,0 +1,65 @@
+#include <cstdio>
+using namespace std;
+int huiwen[20000];
+bool judge(int x)
+{
+    if(x<=1)
+        return false;
+    for(int i=2; i*i<=x; ++i)
+        if(x%i==0)
+            return false;
+    return true;
+}
+int huiwenshu(void)
+{
+    int t = 0;
+    //1
+    for(int i=0; i<=9; ++i)
+        huiwen[t++] = i;
+    //2
+    for(int i=1; i<=9; ++i)
+        huiwen[t++] = i*10 + i;
+    //3
+    for(int i=1; i<=9; ++i)
+        for(int j=0; j<=9; ++j)
+            huiwen[t++] = i*1e2 + j*10 + i;
+    //4
+    for(int i=1; i<=9; ++i)
+        for(int j=0; j<=9; ++j)
+            huiwen[t++] = i*1e3 + j*1e2 + j*10 + i;
+    //5
+    for(int i=1; i<=9; ++i)
+        for(int j=0; j<=9; ++j)
+            for(int k=0; k<=9; ++k)
+                huiwen[t++] = i*1e4 + j*1e3 + k*1e2 + j*10 + i;
+    //6
+    for(int i=1; i<=9; ++i)
+        for(int j=0; j<=9; ++j)
+            for(int k=0; k<=9; ++k)
+                huiwen[t++] = i*1e5 + j*1e4 + k*1e3 + k*1e2 + j*10 + i;
+    //7
+    for(int i=1; i<=9; ++i)
+        for(int j=0; j<=9; ++j)
+            for(int k=0; k<=9; ++k)
+                for(int l=0; l<=9; ++l)
+                    huiwen[t++] = i*1e6+ j*1e5 + k*1e4 + l*1e3 + k*1e2 + j*10 + i;
+    //8
+    for(int i=1; i<=9; ++i)
+        for(int j=0; j<=9; ++j)
+            for(int k=0; k<=9; ++k)
+                for(int l=0; l<=9; ++l)
+                    huiwen[t++] = i*1e7+ j*1e6 + k*1e5 + l*1e4 + l*1e3 + k*1e2 + j*10 + i;
+    return t;
+}
+int main(void)
+{
+    huiwenshu();
+    int x, y, i;
+    while(~scanf("%d %d", &x, &y))
+    {
+        for(i=0; huiwen[i]<x; ++i);
+        for(; huiwen[i]<=y; ++i)
+            if(judge(huiwen[i]))
+                printf("%d\n", huiwen[i]);
+    }
+}

@@ -1,0 +1,59 @@
+#include<stdio.h>
+int main(void)
+{
+    int s, d, st, dt, t, sum;
+    while(~scanf("%d%d", &s, &d))
+    {
+        t = 1;
+        dt = 1;
+        st = 0;
+        sum = 0 - d;
+        while(t-5)
+        {
+            if(sum+s >= 0)
+                sum -= d, ++dt, ++t;
+            else
+                sum += s, ++st, ++t;
+        }
+        sum = 0;
+        switch (st)
+        {
+        case 4:
+            sum = 10*s - 2*d;
+            if(sum>0)
+                printf("%d\n", sum);
+            else
+                printf("Deficit\n");
+            break;
+
+        case 3:
+            sum = 8*s - 4*d;
+            if(sum>0)
+                printf("%d\n", sum);
+            else
+                printf("Deficit\n");
+            break;
+
+        case 2:
+            sum = 6*s - 6*d;
+            if(sum>0)
+                printf("%d\n", sum);
+            else
+                printf("Deficit\n");
+            break;
+
+        case 1:
+            sum = 3*s - 9*d;
+            if(sum>0)
+                printf("%d\n", sum);
+            else
+                printf("Deficit\n");
+            break;
+
+        default:
+            printf("Deficit\n");
+            break;
+        }
+    }
+    return 0;
+}
