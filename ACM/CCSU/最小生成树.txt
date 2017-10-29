@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+typedef struct node
+{
+    int vertex;
+    struct node *pNext;
+}NODE, *PNODE;
+
+int NumOfList(PNODE pHead)
+{
+    PNODE p = pHead->pNext;
+    int count = 0;
+    while(p)
+        p = p->pNext, ++count;
+    return count;
+}
+
+int main(void)
+{
+    int n, vertex[100][100], mint;
+    double a[100][2], side[100][100], min, sum;
+    while(~scanf("%d", &n))
+    {
+        for(int i=0; i<n; ++i)
+            scanf("%lf %lf", &a[i][0], &a[i][1]);
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=i; j<n; ++j)
+            {
+                if(i==j)
+                    side[i][j] = 1<<31-1;
+                else
+                {
+                    int x = a[i][0]-a[j][0];
+                    int y = a[i][1]-a[j][1];
+                    side[i][j] = hypot(x, y);
+                    side[j][i] = side[i][j];
+                }
+            }
+        }
+        PNODE pHead = (PNODE)malloc(sizeof(NODE));
+        pHead->pNext = NULL;
+        PNODE pTail = pHead;
+        pTail->pNext = (PNODE)malloc(sizeof(NODE));
+        pTail = pTail->pNext;
+        pTail->vertex = 0;
+        pTail->pNext = NULL;
+        sum = 0;
+        while(NumOfList(pHead) != n)
+        {
+            pTail = pHead;
+            min = 1<<31-1;
+            mint = 0;
+            while(pTail->pNext)
+            {
+                for(int i=0; i<n; ++i)
+                {
+                    if(pTail->pNext->vertex==i)
+                        continue;
+                    if(vertex[pTail->pNext->vertex][i])
+                        continue;
+                    if(side[pTail->pNext->vertex][i] < min)
+                        min = side[pTail->pNext->vertex][i], mint = i;
+                }
+                vertex[pTail->pNext->vertex][mint] = 1;
+                vertex[mint][pTail->pNext->vertex] = 1;
+                pTail = pTail->pNext;
+            }
+            pTail->pNext = (PNODE)malloc(sizeof(NODE));
+            pTail = pTail->pNext;
+            pTail->vertex = mint;
+            pTail->pNext = NULL;
+            sum += min;
+            //printf("min:%.2lf\n", min);
+        }
+        printf("%.2f\n", sum);
+        memset(vertex, 0, sizeof(vertex));
+        pTail = pHead->pNext;
+        while(pTail)
+        {
+            PNODE pTemp = pTail->pNext;
+            free(pTail);
+            pTail = pTemp;
+        }
+        free(pHead);
+    }
+    return 0;
+}
