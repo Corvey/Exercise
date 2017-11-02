@@ -1,0 +1,11 @@
+A. tree dp
+B. adhoc
+C. segment-segment intersection + point in polygon (or you can use scanline if you like)
+D. adhoc
+E. dijkstra
+F. brute force
+G. subset dp + inclusion-exclusion principle
+H. string processing
+I. bitmask + left-right scanning + hash (or trie)
+J. brute force
+K. query sorting (or using manhattan MST) + 2D range tree (or BST x interval tree etc)
