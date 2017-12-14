@@ -1,0 +1,17 @@
+typedef long long int L;
+L x = 1000000007;
+L q(L a, L b, L c)
+{
+    if(b < 2)
+        return a * c % x;
+    else if(b & 1)
+        return q(a * a % x, (b - 1) / 2, c * a % x);
+    else
+        return q(a * a % x, b / 2, c);
+}
+main()
+{
+    L a, b;
+    while(~scanf("%lld %lld", &a, &b))
+        printf("%lld\n", q(a % x, b, 1));
+}
