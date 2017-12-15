@@ -1,0 +1,47 @@
+#include <cstdio>
+using namespace std;
+
+typedef unsigned long long int ULL;
+ULL a, b, x;
+
+ULL chengfa(ULL a, ULL b)
+{
+    ULL sum = 0;
+    while(b)
+    {
+        if(b%2)
+        {
+            sum += a;
+            sum %= x;
+        }
+        a *= 2;
+        a %= x;
+        b /= 2;
+    }
+    return sum;
+}
+
+ULL miyunsuan(ULL a, ULL b, ULL c)
+{
+    if(b<2)
+        return chengfa(a, c)%x;
+    else if(b&1)
+        return miyunsuan(chengfa(a, a)%x, (b-1)/2, chengfa(c, a)%x);
+    else
+        return miyunsuan(chengfa(a, a)%x, b/2, c);
+}
+
+int main(void)
+{
+    while(~scanf("%llu %llu %llu", &a, &b, &x))
+    {
+        if(x==1)
+            printf("0\n");
+        else if(!b)
+            printf("1\n");
+        else if(!a)
+            printf("0\n");
+        else
+            printf("%llu\n", miyunsuan(a%x, b, 1));
+    }
+}
