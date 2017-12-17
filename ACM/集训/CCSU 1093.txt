@@ -1,0 +1,109 @@
+#include <cstdio>
+#include <string.h>
+using namespace std;
+const int MAX = 40320, fact[] = {1, 1, 2, 6, 24, 120, 720, 5040}, Move[3][8] = {{7, 6, 5, 4, 3, 2, 1, 0}, {3, 0, 1, 2, 5, 6, 7, 4}, {0, 6, 1, 3, 4, 2, 5, 7}};
+bool vis[MAX] = {0};
+int StartCode, EndCode, LOG[MAX][8], End[8];
+struct node
+{
+    char MOVE;
+    int father;
+}path[MAX];
+
+void Init(void)
+{
+    int i, j, cnt;
+    memset(vis, 0, MAX);
+    StartCode = 0;
+    for(i=0; i<7; ++i)
+    {
+        cnt = 0;
+        for(j=i+1; j<8; ++j)
+            if(LOG[0][i] > LOG[0][j])
+                ++cnt;
+        StartCode += cnt * fact[7-i];
+    }
+    vis[StartCode] = true;
+    EndCode = 0;
+    for(i=0; i<7; ++i)
+    {
+        cnt = 0;
+        for(j=i+1; j<8; ++j)
+            if(End[i] > End[j])
+                ++cnt;
+        EndCode += cnt * fact[7-i];
+    }
+}
+
+int TryToInsert(int Front, int Rear, int MOVE)
+{
+    int Fcode = 0, Rcode = 0, i, j, cnt;
+    for(i=0; i<7; ++i)
+    {
+        cnt = 0;
+        for(j=i+1; j<8; ++j)
+            if(LOG[Rear][i] > LOG[Rear][j])
+                ++cnt;
+        Rcode += cnt * fact[7-i];
+    }
+    if(vis[Rcode])
+        return 0;
+    else
+    {
+        for(i=0; i<7; ++i)
+        {
+            cnt = 0;
+            for(j=i+1; j<8; ++j)
+                if(LOG[Front][i] > LOG[Front][j])
+                    ++cnt;
+            Fcode += cnt * fact[7-i];
+        }
+        path[Rcode].father = Fcode;
+        path[Rcode].MOVE = 'A' + MOVE;
+        if(Rcode == EndCode)
+            return -1;
+        else
+            return vis[Rcode] = true;
+    }
+}
+
+void BFS(void)
+{
+    int Front = 0, Rear = 1, i, j, ans;
+    do
+    {
+        for(i=0; i<3; ++i)
+        {
+            for(j=0; j<8; ++j)
+                LOG[Rear][j] = LOG[Front][ Move[i][j] ];
+            ans = TryToInsert(Front, Rear, i);
+            if(ans == -1)
+                return ;
+            else if(ans)
+                ++Rear;
+        }
+        ++Front;
+    } while (Front < Rear);
+}
+void PrintPath(int start, int end)
+{
+    if(start != path[end].father)
+        PrintPath(start, path[end].father);
+    printf("%c", path[end].MOVE);
+}
+int main(void)
+{
+    char StartStr[10], EndStr[10];
+    while(~scanf("%s%s", StartStr, EndStr))
+    {
+        for(int i=0; i<8; ++i)
+        {
+            LOG[0][i] = StartStr[i] - '0';
+            End[i] = EndStr[i] - '0';
+        }
+        Init();
+        BFS();
+        PrintPath(StartCode, EndCode);
+        printf("\n");
+    }
+}

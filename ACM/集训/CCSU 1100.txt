@@ -1,0 +1,21 @@
+#include <cstdio>
+using namespace std;
+int main(void)
+{
+    int n, a, b, c, x, y, z;
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%d %d %d %d %d %d", &a, &b, &c, &x, &y, &z);
+        c += z;
+        z = 0;
+        if(c >= 60)
+            c -= 60, z = 1;
+        b += y + z;
+        y = 0;
+        if(b >= 60)
+            b -= 60, y = 1;
+        a += x + y;
+        printf("%d %d %d\n", a, b, c);
+    }
+}
