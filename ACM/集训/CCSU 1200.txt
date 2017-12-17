@@ -1,0 +1,61 @@
+#include <cstdio>
+#include <algorithm>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+
+int main(void)
+{
+    srand((unsigned)time(NULL));
+    int N, n, a[110], b[55], c[55], nb, nc, sumb, sumc, close, x, y, sx, sy;
+    while(~scanf("%d", &n))
+    {
+        for(int i=0; i<n; ++i)
+            scanf("%d", a+i);
+        if(n==1)
+        {
+            printf("0 %d\n", a[0]);
+            continue;
+        }
+        sort(a, a+n);
+        sumb = sumc = 0;
+        if(n&1)
+        {
+            nb = n/2+1;
+            nc = n - nb;
+            int i = 0;
+            for(; i<nb; ++i)
+                b[i] = a[i], sumb += a[i];
+            for(; i<n; ++i)
+                c[i-nb] = a[i], sumc += a[i];
+        }
+        else
+        {
+            nb = nc = n/2;
+            int i = 0;
+            for(; i<nb; ++i)
+                b[i] = a[i], sumb += a[i];
+            for(; i<n; ++i)
+                c[i-nb] = a[i], sumc += a[i];
+        }
+        close = abs(sumb-sumc);
+        N = 1000000;
+        while(N--)
+        {
+            x = rand() % nb;
+            y = rand() % nc;
+            sx = sumb - b[x] + c[y];
+            sy = sumc + b[x] - c[y];
+            if(abs(sx-sy) < close)
+            {
+                sumb = sx;
+                sumc = sy;
+                b[x] ^= c[y], c[y] ^= b[x], b[x] ^= c[y];
+                close = abs(sx-sy);
+            }
+        }
+        if(sumb > sumc)
+            sumb ^= sumc, sumc ^= sumb, sumb ^= sumc;
+        printf("%d %d\n", sumb, sumc);
+    }
+}
