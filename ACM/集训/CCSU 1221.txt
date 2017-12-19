@@ -1,0 +1,64 @@
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+
+int a[5], flag;
+void judge(int ans, int n, int cur)
+{
+    if(n == cur)
+    {
+        if(ans == 23)
+            flag = 1;
+    }
+    else
+    {
+        for(int i=0; i<3; ++i)
+        {
+            switch (i)
+            {
+            case 0:
+                judge(ans+a[cur], n, cur+1);
+                break;
+
+            case 1:
+                judge(ans-a[cur], n, cur+1);
+                break;
+
+            case 2:
+                judge(ans*a[cur], n, cur+1);
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+}
+
+int main(void)
+{
+    int tag;
+    while(1)
+    {
+        tag = 0;
+        for(int i=0; i<5; ++i)
+        {
+            scanf("%d", a+i);
+            tag += a[i];
+        }
+        if(tag == 0)
+            break;
+        sort(a, a+5);
+        flag = 0;
+        do
+        {
+            judge(a[0], 5, 1);
+
+        } while (next_permutation(a, a+5));
+
+        if(flag)
+            printf("Possible\n");
+        else
+            printf("Impossible\n");
+    }
+}

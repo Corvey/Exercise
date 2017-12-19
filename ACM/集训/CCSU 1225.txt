@@ -1,0 +1,45 @@
+#include <cstdio>
+using namespace std;
+ 
+int main(void)
+{
+    char s[10];
+    int t, k, a[3];
+    scanf("%d", &t);
+    for(int i=1; i<=t; ++i)
+    {
+        scanf("%d\n", &k);
+        if(k==1)
+        {
+            scanf("%d %d %d", a, a+1, a+2);
+            sprintf(s, "%02x%02x%02x", a[0], a[1], a[2]);
+            for(int j=0; s[j]; ++j)
+                if(s[j] >= 97 && s[j] <= 122)
+                    s[j] -= 32;
+            printf("Case %d: #", i);
+            puts(s);
+        }
+        else if(k==2)
+        {
+            gets(s);
+            printf("Case %d:", i);
+            for(int j=0; s[j]; ++j)
+                if(s[j] >= 97 && s[j] <= 122)
+                    s[j] -= 32;
+            for(int j=0; j<3; ++j)
+            {
+                int sum = 0;
+                if(s[2+j*2] >= 'A' && s[2+j*2] <= 'F')
+                    sum += s[2+j*2] - 'A' + 10;
+                else
+                    sum += s[2+j*2] - '0';
+                if(s[1+j*2] >= 'A' && s[1+j*2] <= 'F')
+                    sum += (s[1+j*2] - 'A' + 10) * 16;
+                else
+                    sum += (s[1+j*2] - '0') * 16;
+                printf(" %d", sum);
+            }
+            printf("\n");
+        }
+    }
+}

@@ -1,0 +1,86 @@
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+using namespace std;
+ 
+struct node
+{
+    int left;
+    int right;
+};
+ 
+bool cmp(node x, node y)
+{
+    if(x.left == y.left)
+        return x.right > y.right;
+    else
+        return x.left < y.left;
+}
+int main(void)
+{
+    vector<node> s;
+    vector<node> qwe;
+    struct node x;
+    int t, n, m;
+    scanf("%d", &t);
+    while(t--)
+    {
+        scanf("%d", &n);
+        for(int i=0; i<n; ++i)
+        {
+            scanf("%d %d", &x.left, &x.right);
+            s.push_back(x);
+        }
+        scanf("%d", &m);
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d", &x.left, &x.right);
+            s.push_back(x);
+        }
+        sort(s.begin(), s.end(), cmp);
+        /*
+        puts("sort:");
+        for(int i=0; i<s.size(); ++i)
+            printf("%d %d\n", s[i].left, s[i].right);
+        printf("******\n");
+        */
+        for(int i=0; i<s.size(); ++i)
+        {
+            x.left = s[i].left;
+            x.right = s[i].right;
+            int j=i+1;
+            if(j == s.size())
+                qwe.push_back(x);
+            else
+            {
+                for(; j<s.size(); ++j)
+                {
+                    if(x.left <= s[j].left && s[j].right <= x.right)
+                        continue;
+                    if(s[j].left >= x.left && s[j].left <= x.right && s[j].right > x.right)
+                        x.right = s[j].right;
+                    else
+                    {
+                        qwe.push_back(x);
+                        break;
+                    }
+                }
+                if(j == s.size())
+                    qwe.push_back(x);
+            }
+            i = j-1;
+        }
+        int sum = 0;
+        for(int i=0; i<qwe.size(); ++i)
+            sum += qwe[i].right - qwe[i].left + 1;
+        /*
+        puts("sort:");
+        for(int i=0; i<qwe.size(); ++i)
+            printf("%d %d\n", qwe[i].left, qwe[i].right);
+        printf("******\n");
+        */
+        printf("%d\n", sum);
+        s.clear();
+        qwe.clear();
+    }
+}
