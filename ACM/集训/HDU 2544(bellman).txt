@@ -1,0 +1,43 @@
+#include <cstdio>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+
+const int N = 200, M = 11000, INF = 0x3f3f3f3f;
+int from[M], to[M], edge[M];
+int bellman(int n, int m)
+{
+    int D[N], a, b;
+    memset(D, INF, sizeof(D));
+    D[0] = 0;
+    for(int i=1; i<n; ++i)
+    {
+        for(int j=0; j<m; ++j)
+        {
+            a = from[j];
+            b = to[j];
+            D[b] = min(D[b], D[a] + edge[j]);
+        }
+    }
+    return D[n-1];
+}
+int main(void)
+{
+    int n, m, num, a, b, c;
+    while(scanf("%d %d", &n, &m), n+m)
+    {
+        num = 0;
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", &a, &b, &c);
+            --a, --b;
+            from[num] = a;
+            to[num] = b;
+            edge[num++] = c;
+            from[num] = b;
+            to[num] = a;
+            edge[num++] = c;
+        }
+        printf("%d\n", bellman(n, num));
+    }
+}

@@ -1,0 +1,105 @@
+#include <cstdio>
+#include <string.h>
+using namespace std;
+const int MAX = 362880, fact[] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320}, dx[] = {0, -1, 1, 0}, dy[] = {-1, 0, 0, 1};
+bool vis[MAX] = {0};
+int LOG[MAX][9] = {1, 2, 3, 4, 5, 6, 7, 8, 0};
+struct node
+{
+    char MOVE;
+    int father;
+}path[MAX];
+bool TryToInsert(int Front, int Rear, int MOVE)
+{
+    int i, j, cnt, Rcode = 0, Fcode = 0;
+    for(i=0; i<9; ++i)
+    {
+        cnt = 0;
+        for(j=i+1; j<9; ++j)
+            if(LOG[Rear][i] > LOG[Rear][j])
+                ++cnt;
+        Rcode += cnt * fact[8-i];
+    }
+    if(vis[Rcode])
+        return false;
+    else
+    {
+        for(i=0; i<9; ++i)
+        {
+            cnt = 0;
+            for(j=i+1; j<9; ++j)
+                if(LOG[Front][i] > LOG[Front][j])
+                    ++cnt;
+            Fcode += cnt * fact[8-i];
+        }
+        path[Rcode].father = Fcode;
+        switch(MOVE){
+            case 0: path[Rcode].MOVE = 'd'; break;
+            case 1: path[Rcode].MOVE = 'r'; break;
+            case 2: path[Rcode].MOVE = 'l'; break;
+            case 3: path[Rcode].MOVE = 'u'; break;
+        }
+        return vis[Rcode] = true;
+    }
+}
+
+void BFS(void)
+{
+    int Front = 0, Rear = 1, x, y, i, nx, ny, npos, opos;
+    vis[46233] = true;
+    do
+    {
+        for(opos=8; LOG[Front][opos]; --opos);
+        x = opos % 3;
+        y = opos / 3;
+        for(int i=0; i<4; ++i)
+        {
+            nx = x + dx[i];
+            ny = y + dy[i];
+            if(nx >= 0 && nx <= 2 && ny >= 0 && ny <= 2)
+            {
+                npos = ny*3 + nx;
+                memcpy(LOG[Rear], LOG[Front], 36);
+                LOG[Rear][npos] ^= LOG[Rear][opos], LOG[Rear][opos] ^= LOG[Rear][npos], LOG[Rear][npos] ^= LOG[Rear][opos];
+                if(TryToInsert(Front, Rear, i))
+                    ++Rear;
+            }
+        }
+        ++Front;
+    } while (Front < Rear);
+}
+int main(void)
+{
+    //freopen("in.txt", "r", stdin);
+    int i, j, Zero, code, aim[9];
+    char str[30];
+    BFS();
+    while(gets(str))
+    {
+        for(i=0, Zero=0; str[i]!='x'; ++i)
+            if(str[i] != ' ')
+                ++Zero;
+        str[i] = '0';
+        sscanf(str, "%d%d%d%d%d%d%d%d%d", aim, aim+1, aim+2, aim+3, aim+4, aim+5, aim+6, aim+7, aim+8);
+        code = 0;
+        for(i=0; i<9; ++i)
+        {
+            int cnt = 0;
+            for(j=i+1; j<9; ++j)
+                if(aim[i] > aim[j])
+                    ++cnt;
+            code += cnt * fact[8-i];
+        }
+        if(!vis[code])
+            printf("unsolvable\n");
+        else
+        {
+            while(code != 46233)
+            {
+                printf("%c", path[code].MOVE);
+                code = path[code].father;
+            }
+            printf("\n");
+        }
+    }
+}
