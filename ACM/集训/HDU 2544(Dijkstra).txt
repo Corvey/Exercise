@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+const int N = 200, INF = 0x3f3f3f3f;
+int edge[N][N];
+int Dijkstra(int n)
+{
+    int D[N], tag;
+    bool vis[N] = {0};
+    memcpy(D, edge[0], sizeof(D));
+    vis[0] = true;
+    for(int i=0; i<n; ++i)
+    {
+        tag = 0;
+        for(int j=0; j<n; ++j)
+            if(!vis[j])
+                tag = D[j] < D[tag] ? j : tag;
+        vis[tag] = true;
+        for(int j=0; j<n; ++j)
+            if(!vis[j])
+                D[j] = min(D[j], D[tag] + edge[tag][j]);
+    }
+    return D[n-1];
+}
+int main(void)
+{
+    int n, m, from, to, d;
+    while(scanf("%d %d", &n, &m), n+m)
+    {
+        memset(edge, INF, sizeof(edge));
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", &from, &to, &d);
+            --from, --to;
+            edge[from][to] = edge[to][from] = min(edge[from][to], d);
+        }
+        printf("%d\n", Dijkstra(n));
+    }
+}
