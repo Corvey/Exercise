@@ -1,0 +1,61 @@
+#include <cstdio>
+#include <string.h>
+#include <vector>
+#include <time.h>
+using namespace std;
+
+struct DOT
+{
+    double x;
+    double y;
+};
+vector<DOT> a, b;
+int main (void)
+{
+    freopen("in.txt", "r", stdin);
+    char s[10];
+    double dpre, dnow, ans;
+    int time, all;
+    DOT temp, pre, now;
+    for(double i=0; i<=10; i+=0.01)
+    {
+        temp.x = i;
+        for(double j=0; j<=10; j+=0.01)
+        {
+            temp.y = j;
+            a.push_back(temp);
+        }
+    }
+    all = a.size();
+    pre.x = 0;
+    pre.y = 0;
+    while(1)
+    {
+        scanf("%lf %lf %s", &now.x, &now.y, s);
+        time = a.size();
+        for(int i=0; i<time; ++i)
+        {
+            temp.x = a[i].x - pre.x;
+            temp.y = a[i].y - pre.y;
+            dpre = temp.x * temp.x + temp.y * temp.y;
+
+            temp.x = a[i].x - now.x;
+            temp.y = a[i].y - now.y;
+            dnow = temp.x * temp.x + temp.y * temp.y;
+            if(dnow > dpre && strcmp(s, "Colder")==0 || dnow < dpre && strcmp(s, "Hotter")==0 || dnow == dpre && strcmp(s, "Same")==0)
+            {
+                temp.x = a[i].x;
+                temp.y = a[i].y;
+                b.push_back(temp);
+            }
+        }
+        double ans = (double)b.size()/all*100;
+        printf("%.2lf\n", ans);
+        if(!ans)
+            break;
+        a = b;
+        b.clear();
+        pre.x = now.x;
+        pre.y = now.y;
+    }
+}
