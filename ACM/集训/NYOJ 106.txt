@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+struct things
+{
+    int v;
+    int w;
+};
+bool cmp(things a, things b)
+{
+    return a.v > b.v;
+}
+int main(void)
+{
+    things t[10];
+    int n, s, m, all;
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%d %d", &s, &m);
+        for(int i=0; i<s; ++i)
+            scanf("%d %d", &t[i].v, &t[i].w);
+        sort(t, t+s, cmp);
+        all = 0;
+        for(int i=0; m && i<s; ++i)
+        {
+            if(t[i].w >= m)
+            {
+                all += t[i].v * m;
+                m = 0;
+            }
+            else
+            {
+                m -= t[i].w;
+                all += t[i].w * t[i].v;
+            }
+        }
+        printf("%d\n", all);
+    }
+}
