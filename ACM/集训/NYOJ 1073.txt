@@ -1,0 +1,23 @@
+#include <cstdio>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+
+int main(void)
+{
+    int t, n, m, a[30010], x, b[30010];
+    scanf("%d", &t);
+    while(t--)
+    {
+        scanf("%d %d", &n, &m);
+        for(int i=0; i<n; ++i)
+            scanf("%d", a+i);
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d", &x);
+            memcpy(b, a, x * sizeof(int));
+            sort(b, b+x);
+            printf("%d\n", b[i]);
+        }
+    }
+}
