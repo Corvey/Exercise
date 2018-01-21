@@ -1,0 +1,54 @@
+#include <cstdio>
+#include <string>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main(void)
+{
+    int t, n, x, max, len;
+    string temp, article;
+    vector<string> words;
+    map<string, int> cnt;
+    cin >> t;
+    while(t--)
+    {
+        cin >> n;
+        for(int i=0; i<n; ++i)
+        {
+            cin >> temp;
+            cnt[temp] = 0;
+            words.push_back(temp);
+        }
+        cin >> article;
+        max = 0;
+        for(int i=0; i<n; ++i)
+        {
+            if(cnt[ words[i] ])
+                continue;
+            x = 0;
+            len = words[i].length();
+            while(1)
+            {
+                x = article.find(words[i], x);
+                if(x == -1)
+                    break;
+                else
+                {
+                    x += len;
+                    ++cnt[ words[i] ];
+                    if(cnt[ words[i] ] > max)
+                        max = cnt[ words[i] ];
+                }
+            }
+        }
+        printf("%d\n", max);
+        for(int i=0; i<n; ++i)
+            if(cnt[ words[i] ] == max)
+                cout << words[i] << endl;
+        words.clear();
+        cnt.clear();
+    }
+}

@@ -1,0 +1,29 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <map>
+using namespace std;
+
+int main(void)
+{
+    map<string, int> s;
+    int t, n, len, ans;
+    string str, temp;
+    cin >> t;
+    while(t--)
+    {
+        cin >> n >> str;
+        len = str.length();
+        ans = 0;
+        for(int i=0; i<len-n+1; ++i)
+        {
+            temp.assign(str, i, n);
+            if(s[temp])
+                ++ans;
+            else
+                s[temp] = 1;
+        }
+        cout << ans << endl;
+        s.clear();
+    }
+}
