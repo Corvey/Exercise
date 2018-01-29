@@ -1,0 +1,32 @@
+#include <cstdio>
+using namespace std;
+
+const int N = 1010;
+int dp[N][N]={0};
+int main(void)
+{
+    int n, v, c[N], w[N], MAX;
+    while(1)
+    {
+        scanf("%d %d", &n, &v);
+        if(!(n+v))
+            break;
+        for(int i=1; i<=n; ++i)
+            scanf("%d %d", c+i, w+i);
+        for(int i=1; i<=n; ++i)
+        {
+            for(int j=0; j<=v; ++j)
+            {
+                if(j < c[i])
+                    dp[i][j] = dp[i-1][j];
+                else
+                    dp[i][j] = dp[i-1][j] > (w[i] + dp[i-1][ j-c[i] ]) ? dp[i-1][j] : (w[i] + dp[i-1][ j-c[i] ]);
+            }
+        }
+        MAX = 0;
+        for(int i=1; i<=n; ++i)
+            if(dp[i][v] > MAX)
+                MAX = dp[i][v];
+        printf("%d\n", MAX);
+    }
+}

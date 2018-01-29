@@ -1,0 +1,21 @@
+#include<stdio.h>
+#include<stdlib.h>
+double z()
+{
+    char a[10];
+    if(!~scanf("%s", a))
+        exit(0);
+    switch(*a)
+    {
+    case'+':return z() + z();
+    case'-':return z() - z();
+    case'*':return z() * z();
+    case'/':return z() / z();
+    default:return atof(a);
+    }
+}
+main()
+{
+    while(1)
+        printf("%.2f\n", z());
+}

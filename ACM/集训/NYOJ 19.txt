@@ -1,0 +1,40 @@
+#include <cstdio>
+using namespace std;
+int a[10], b[10], num, m;
+
+void qwe(int n, int cur)
+{
+    if(n == cur)
+    {
+        for(int i=0; i<n; ++i)
+            printf("%d", a[i]);
+        printf("\n");
+    }
+    else
+    {
+        for(int i=0; i<num; ++i)
+        {
+            int ok = 1;
+            for(int j=0; j<cur; ++j)
+                if(a[j] == b[i])
+                    ok = 0;
+            if(ok)
+            {
+                a[cur] = b[i];
+                qwe(n, cur+1);
+            }
+        }
+    }
+}
+int main(void)
+{
+    int kase;
+    scanf("%d", &kase);
+    while(kase--)
+    {
+        scanf("%d %d", &num, &m);
+        for(int i=0; i<num; ++i)
+            b[i] = i+1;
+        qwe(m, 0);
+    }
+}
