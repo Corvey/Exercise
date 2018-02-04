@@ -1,0 +1,73 @@
+#include <cstdio>
+#include <stack>
+using namespace std;
+
+int main(void)
+{
+    int n, Isnum;
+    char ch;
+    stack<char> s;
+    scanf("%d", &n);
+    while(n--)
+    {
+        Isnum = 0;
+        while(1)
+        {
+            scanf("%c", &ch);
+            if(ch == '=')
+            {
+                if(!Isnum)
+                    printf("\b");
+                break;
+            }
+            else if( (ch >= '0' && ch<='9') || ch == '.')
+            {
+                putchar(ch);
+                Isnum = 1;
+            }
+            else
+            {
+                if(Isnum)
+                {
+                    putchar(' ');
+                    Isnum = 0;
+                }
+                if(ch == '(')
+                    s.push(ch);
+                else if(ch == ')')
+                {
+                    while(s.top() != '(')
+                    {
+                        printf("%c ", s.top());
+                        s.pop();
+                    }
+                    s.pop();
+                }
+                else if(ch == '/' || ch == '*')
+                {
+                    while(!s.empty() && (s.top() == '*' || s.top() == '/') )
+                    {
+                        printf("%c ", s.top());
+                        s.pop();
+                    }
+                    s.push(ch);
+                }
+                else if(ch == '+' || ch == '-')
+                {
+                    while(!s.empty() && s.top() != '(' )
+                    {
+                        printf("%c ", s.top());
+                        s.pop();
+                    }
+                    s.push(ch);
+                }
+            }
+        }
+        while(!s.empty())
+        {
+            printf(" %c", s.top());
+            s.pop();
+        }
+        printf(" =\n");
+    }
+}
