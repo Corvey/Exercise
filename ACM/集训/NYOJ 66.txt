@@ -1,0 +1,29 @@
+#include <cstdio>
+using namespace std;
+
+int GCD(int a, int b)
+{
+    return b ? GCD(b, a%b) : a;
+}
+int main(void)
+{
+    int n, m, y, gcd, a, b;
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%d", &m);
+        for(y=1; y<=2*m; ++y)
+        {
+            gcd = GCD(m, y);
+            b = m * y / gcd;
+            a = y/gcd - m/gcd;
+            gcd = GCD(a, b);
+            a /= gcd;
+            b /= gcd;
+            if(a != 1)
+                continue;
+            if(b >= y)
+                printf("1/%d=1/%d+1/%d\n", m, b, y);
+        }
+    }
+}

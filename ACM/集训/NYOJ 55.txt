@@ -1,0 +1,34 @@
+#include <cstdio>
+#include <queue>
+#include <vector>
+using namespace std;
+
+int main(void)
+{
+    priority_queue<long long int, vector<long long int>, greater<long long int> > pq;
+    int kase, n;
+    long long int temp, sum;
+    scanf("%d", &kase);
+    while(kase--)
+    {
+        scanf("%d", &n);
+        for(int i=0; i<n; ++i)
+        {
+            scanf("%lld", &temp);
+            pq.push(temp);
+        }
+        sum = 0;
+        while(n!=1)
+        {
+            temp = pq.top();
+            pq.pop();
+            temp += pq.top();
+            pq.pop();
+            sum += temp;
+            pq.push(temp);
+            --n;
+        }
+        printf("%lld\n", sum);
+        pq.pop();
+    }
+}

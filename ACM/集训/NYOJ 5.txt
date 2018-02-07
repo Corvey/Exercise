@@ -1,0 +1,25 @@
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+int main(void)
+{
+    int n, lena, lenb, time;
+    char a[15], b[1010];
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%s %s", a, b);
+        lena = strlen(a);
+        lenb = strlen(b);
+        time = 0;
+        for(char *i=b; i-b<=lenb-lena; ++i)
+        {
+            if(i = strstr(i, a))
+                ++time;
+            else
+                break;
+        }
+        printf("%d\n", time);
+    }
+}
