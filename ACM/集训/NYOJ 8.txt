@@ -1,0 +1,46 @@
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+
+struct NODE
+{
+    int number;
+    int length;
+    int width;
+};
+
+bool cmp(NODE x, NODE y)
+{
+    if(x.number != y.number)
+        return x.number < y.number;
+    else
+    {
+        if(x.length != y.length)
+            return x.length < y.length;
+        else
+            return x.width <= y.width;
+    }
+}
+
+int main(void)
+{
+    NODE a[1010];
+    int n, m;
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%d", &m);
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", &a[i].number, &a[i].length, &a[i].width);
+            if(a[i].length < a[i].width)
+                a[i].length ^= a[i].width, a[i].width ^= a[i].length, a[i].length ^= a[i].width;
+        }
+        sort(a, a+m, cmp);
+        for(int i=0; i<m; ++i)
+        {
+            for(; i+1<m && a[i].number == a[i+1].number && a[i].length == a[i+1].length && a[i].width == a[i+1].width; ++i);
+            printf("%d %d %d\n", a[i].number, a[i].length, a[i].width);
+        }
+    }
+}

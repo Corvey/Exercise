@@ -1,0 +1,111 @@
+#include <cstdio>
+#include <queue>
+#include <algorithm>
+#include <vector>
+#include <string.h>
+using namespace std;
+
+struct NODE
+{
+    char ch;
+    int weight;
+    char code[100];
+    struct NODE *pL;
+    struct NODE *pR;
+};
+struct cmp
+{
+    bool operator() (const NODE a, const NODE b) const{
+        return a.weight > b.weight ? 1 : (a.weight == b.weight ? a.ch>=b.ch : 0);
+    }
+};
+
+bool DFS(NODE* p, char x)
+{
+    if(p->ch == x)
+    {
+        puts(p->code);
+        return true;
+    }
+    if(p->pL)
+        DFS(p->pL, x);
+    if(p->pR)
+        DFS(p->pR, x);
+    return false;
+}
+
+void kankan(NODE* p)
+{
+    puts(p->code);
+    if(p->pL)
+        kankan(p->pL);
+    if(p->pR)
+        kankan(p->pR);
+}
+int main(void)
+{
+    int n;
+    NODE temp, x, y;
+    vector<char> Input;
+    priority_queue<NODE, vector<NODE>, cmp> pq;
+    temp.pL = NULL;
+    temp.pR = NULL;
+    *temp.code = 0;
+    while(~scanf("%d", &n))
+    {
+        getchar();
+        for(int i=0; i<n; ++i)
+        {
+            scanf("%c %d", &temp.ch, &temp.weight);
+            getchar();
+            Input.push_back(temp.ch);
+            pq.push(temp);
+        }
+        while(1)
+        {
+            x = pq.top();
+            pq.pop();
+            if(*x.code)
+                sprintf(x.code, "%s%c", x.code, '0');
+            else
+                *x.code = '0';
+
+            y = pq.top();
+            pq.pop();
+            if(*y.code)
+                sprintf(y.code, "%s%c", y.code, '1');
+            else
+                *y.code = '1';
+
+            temp.ch = 0;
+            temp.weight = x.weight + y.weight;
+            temp.pL = (NODE *)malloc(sizeof(NODE));
+            temp.pL->ch = x.ch;
+            temp.pL->weight = x.weight;
+            strcpy(temp.pL->code, x.code);
+            temp.pL->pL = x.pL;
+            temp.pL->pR = x.pR;
+
+            temp.pR = (NODE *)malloc(sizeof(NODE));
+            temp.pR->ch = y.ch;
+            temp.pR->weight = y.weight;
+            strcpy(temp.pR->code, y.code);
+            temp.pR->pL = y.pL;
+            temp.pR->pR = y.pR;
+
+            if(pq.empty())
+                break;
+            else
+                pq.push(temp);
+        }
+        //kankan(&temp);
+        printf("\n");
+        for(int i=0; i<n; ++i)
+        {
+            printf("%c:", Input[i]);
+            DFS(&temp, Input[i]);
+            printf("\n");
+        }
+
+    }
+}
