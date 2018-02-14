@@ -1,0 +1,38 @@
+#include <cstdio>
+#include <stack>
+using namespace std;
+
+int main(void)
+{
+    stack<int> s[4];
+    int n, p, q, temp, t, a[110][2];
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%d %d", &p, &q);
+        for(int i=0; i<p; ++i)
+            s[1].push(p-i);
+        for(int i=0; i<q; ++i)
+            scanf("%d %d", &a[i][0], &a[i][1]);
+        for(t=0; t<q; ++t)
+        {
+            if(!s[ a[t][0] ].empty())
+            {
+                temp = s[ a[t][0] ].top();
+                if(s[ a[t][1] ].empty() || temp < s[ a[t][1] ].top())
+                {
+                    s[ a[t][1] ].push(temp);
+                    s[ a[t][0] ].pop();
+                }
+                else
+                    break;
+            }
+            else
+                break;
+        }
+        printf("%s\n", t==q ? "legal" : "illegal");
+        for(int i=0; i<4; ++i)
+            while(!s[i].empty())
+                s[i].pop();
+    }
+}

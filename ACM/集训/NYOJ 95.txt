@@ -1,0 +1,26 @@
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+
+int main(void)
+{
+    int n, m, a[110], MAX, MAXT, time;
+    scanf("%d", &n);
+    while(n--)
+    {
+        scanf("%d", &m);
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d", a+i);
+        }
+        sort(a, a+m);
+        MAX = MAXT = 0;
+        for(int i=0; i<m; ++i)
+        {
+            for(time=1; i+1<m && a[i] == a[i+1]; ++time, ++i);
+            if(time > MAX)
+                MAX = time, MAXT = i;
+        }
+        printf("%d %d\n", a[MAXT], MAX);
+    }
+}
