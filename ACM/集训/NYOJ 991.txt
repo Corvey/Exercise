@@ -1,0 +1,26 @@
+#include <iostream>
+#include <string>
+#include <map>
+using namespace std;
+
+int main(void)
+{
+    int n;
+    string str;
+    map<string, int> s;
+    cin >> n;
+    while(n--)
+    {
+        cin >> str;
+        if(s[str])
+        {
+            cout << str << s[str] << endl;
+            ++s[str];
+        }
+        else
+        {
+            cout << "OK" << endl;
+            s[str] = 1;
+        }
+    }
+}

@@ -1,0 +1,58 @@
+#include <cstdio>
+#include <algorithm>
+#include <time.h>
+#include <vector>
+using namespace std;
+
+struct NODE
+{
+    long long int l;
+    long long int r;
+    long long int all;
+};
+
+int main(void)
+{
+    freopen("in.txt", "r", stdin);
+    srand((unsigned)time(NULL));
+    vector<NODE> s;
+    NODE temp;
+    int n, x, y, N;
+    long long int get, MAX;
+    while(~scanf("%d%lld%lld", &n, &temp.l, &temp.r))
+    {
+        temp.all = 1;
+        s.push_back(temp);
+        for(int i=1; i<=n; ++i)
+        {
+            temp.all = s[i-1].l * s[i-1].all;
+            scanf("%lld %lld", &temp.l, &temp.r);
+        s.push_back(temp);
+        }
+        MAX = 0;
+        for(int i=1; i<=n; ++i)
+        {
+            get = s[i].all / s[i].r;
+            if(MAX < get)
+                MAX = get;
+        }
+        N = 200000;
+        while(N--)
+        {
+            x = rand()%(n-1)+1;
+            y = rand()%(n-1)+1;
+            if(x>y)
+                x^=y, y^=x, x^=y;
+            swap(s[x], s[y]);
+            for(int i=x; i<=y; ++i)
+            {
+                s[i].all = s[i-1].all * s[i-1].l;
+                get = s[i].all / s[i].r;
+                if(MAX < get)
+                    MAX = get;
+            }
+        }
+        printf("%lld\n", MAX);
+        s.clear();
+    }
+}
