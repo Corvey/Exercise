@@ -1,0 +1,73 @@
+#include <cstdio>
+#include <string.h>
+const int N = 200, INF = 0x3f3f3f3f;
+int edge[N][N], Lv[N];
+void Print(int n)
+{
+    for(int i=0; i<n; ++i)
+    {
+        for(int j=0; j<n; ++j)
+            printf("%d\t", edge[i][j] == INF ? 0 : edge[i][j]);
+        printf("\n");
+    }
+}
+int Dijkstra(int n, int minL, int maxL)
+{
+    int D[N], mintag;
+    bool vis[N] = {0};
+    memcpy(D, edge[0], sizeof(D));
+    for(int i=1; i<n; ++i)
+    {
+        mintag = n;
+        for(int j=0; j<n; ++j)
+            if(!vis[j] && Lv[j] >= minL && Lv[j] <= maxL && D[j] < D[mintag])
+                mintag = j;
+        /*
+        if(mintag == 0)
+            break;
+        else*/
+            vis[mintag] = true;
+        for(int j=0; j<n; ++j)
+            if(!vis[j] && Lv[j] >= minL && Lv[j] <= maxL && D[mintag] + edge[mintag][j] < D[j])
+                D[j] = D[mintag] + edge[mintag][j];
+    }
+    /*
+    printf("\n");
+    for(int i=0; i<n; ++i)
+        printf("%d\t", D[i]);
+    printf("\n");
+    */
+    //printf("%d\n", D[0]);
+    return D[0];
+}
+int main(void)
+{
+    //freopen("in.txt", "rt", stdin);
+    //freopen("out.txt", "wt", stdout);
+    int m, n, p, l, x, t, v, MIN;
+    while(~scanf("%d %d", &m, &n))
+    {
+        memset(edge, INF, sizeof(edge));
+        for(int i=0; i<n; ++i)
+        {
+            scanf("%d %d %d", &p, &l, &x);
+            edge[i][0] = p;
+            Lv[i] = l;
+            for(int j=0; j<x; ++j)
+            {
+                scanf("%d %d", &t, &v);
+                //if(v < edge[i][t-1])
+                    edge[i][t-1] = v;
+            }
+        }
+        //Print(n);
+        MIN = INF;
+        for(int i=Lv[0]-m; i<=Lv[0]; ++i)
+        {
+            x = Dijkstra(n, i, i+m);
+            if(x < MIN)
+                MIN = x;
+        }
+        printf("%d\n", MIN);
+    }
+}
