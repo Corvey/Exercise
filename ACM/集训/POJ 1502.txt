@@ -1,0 +1,43 @@
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <string.h>
+using namespace std;
+const int N = 110, INF = 0x3f3f3f3f;
+int edge[N][N];
+bool cnt[N] = {0};
+int main(void)
+{
+    char str[100];
+    int n, tag;
+    while(~scanf("%d\n", &n))
+    {
+        edge[0][0] = INF;
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=0; j<i; ++j)
+            {
+                scanf("%s", str);
+                edge[i][j] = edge[j][i] = str[0] == 'x' ? INF : atoi(str);
+            }
+        }
+        cnt[0] = true;
+        for(int i=1; i<n; ++i)
+        {
+            tag = 0;
+            for(int j=1; j<n; ++j)
+                if(!cnt[j] && edge[0][j] < edge[0][tag])
+                    tag = j;
+            cnt[tag] = true;
+            for(int j=1; j<n; ++j)
+                if(!cnt[j])
+                    edge[0][j] = min(edge[0][j], edge[0][tag] + edge[tag][j]);
+        }
+        tag = 0;
+        edge[0][0] = 0;
+        for(int j=1; j<n; ++j)
+            tag = edge[0][j] > edge[0][tag] ? j : tag;
+        printf("%d\n", edge[0][tag]);
+        memset(cnt, 0, sizeof(cnt));
+    }
+}

@@ -1,0 +1,93 @@
+#include <cstdio>
+#include <string.h>
+#include <algorithm>
+#include <queue>
+using namespace std;
+const int MAX = 1000100;
+const long long int INF = 100000000000LL;
+struct GRAPH
+{
+    int first[MAX], u[MAX], v[MAX], Next[MAX];
+    long long int w[MAX];
+}Come, Back;
+long long int dist1[MAX], dist2[MAX];
+long long int SPFA(int n)
+{
+    bool cnt[MAX] = {0};
+    int x;
+    long long int sum = 0;
+    queue<int> q;
+    for(int i=1; i<n; ++i)
+        dist1[i] = dist2[i] = INF;
+    dist1[0] = dist2[0] = 0;
+    cnt[0] = true;
+    q.push(0);
+    while(!q.empty())
+    {
+        x = Come.first[q.front()];
+        while(~x)
+        {
+            if(dist1[Come.v[x]] > dist1[Come.u[x]] + Come.w[x])
+            {
+                dist1[Come.v[x]] = dist1[Come.u[x]] + Come.w[x];
+                if(!cnt[Come.v[x]])
+                {
+                    q.push(Come.v[x]);
+                    cnt[Come.v[x]] = true;
+                }
+            }
+            x = Come.Next[x];
+        }
+        cnt[q.front()] = false;
+        q.pop();
+    }
+    memset(cnt, 0, sizeof(cnt));
+    cnt[0] = true;
+    q.push(0);
+    while(!q.empty())
+    {
+        x = Back.first[q.front()];
+        while(~x)
+        {
+            if(dist2[Back.v[x]] > dist2[Back.u[x]] + Back.w[x])
+            {
+                dist2[Back.v[x]] = dist2[Back.u[x]] + Back.w[x];
+                if(!cnt[Back.v[x]])
+                {
+                    q.push(Back.v[x]);
+                    cnt[Back.v[x]] = true;
+                }
+            }
+            x = Back.Next[x];
+        }
+        cnt[q.front()] = false;
+        q.pop();
+    }
+    for(int i=1; i<n; ++i)
+        sum += dist1[i] + dist2[i];
+    return sum;
+}
+int main(void)
+{
+    int kase, n, m, from, to;
+    scanf("%d", &kase);
+    while(kase--)
+    {
+        memset(Come.first, -1, sizeof(Come.first));
+        memset(Back.first, -1, sizeof(Back.first));
+        scanf("%d %d", &n, &m);
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %lld", &from, &to, &Come.w[i]);
+            --from, --to;
+            Back.w[i] = Come.w[i];
+            Come.u[i] = Back.v[i] = from;
+            Come.v[i] = Back.u[i] = to;
+            Come.Next[i] = Come.first[Come.u[i]];
+            Come.first[Come.u[i]] = i;
+            Back.Next[i] = Back.first[Back.u[i]];
+            Back.first[Back.u[i]] = i;
+        }
+        printf("%lld\n", SPFA(n));
+    }
+}
