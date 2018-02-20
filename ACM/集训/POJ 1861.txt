@@ -1,0 +1,53 @@
+#include <cstdio>
+#include <string.h>
+const int N = 1100, INF = 0x3f3f3f3f;
+int graph[N][N], D[N], P[N];
+bool cnt[N] = {0};
+int main(void)
+{
+    int n, m, a, b, d, start, tag;
+    while(~scanf("%d %d", &n, &m))
+    {
+        memset(graph, INF, sizeof(graph));
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", &a, &b, &d);
+            graph[a][b] = d;
+            graph[b][a] = d;
+        }
+        start = 1;
+        cnt[start] = true;
+        memcpy(D, graph[1], sizeof(D));
+        memset(P, 0, sizeof(P));
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=2; j<=n; ++j)
+            {
+                if(!cnt[j] && graph[start][j] < D[j])
+                {
+                    D[j] = graph[start][j];
+                    P[j] = start;
+                }
+            }
+            tag = 0;
+            for(int j=2; j<=n; ++j)
+                if(!cnt[j])
+                    tag = D[tag] < D[j] ? tag : j;
+            start = tag;
+            cnt[start] = true;
+        }
+        tag = 2;
+        for(int i=2; i<=n; ++i)
+            if(D[i] != INF)
+                tag = D[tag] > D[i] ? tag : i;
+        memset(cnt, 0, sizeof(cnt));
+        printf("%d\n%d\n", D[tag], n-1);
+        for(int i=2; i<=n; ++i)
+        {
+            if(!P[i])
+                printf("1 %d\n", i);
+            else
+                printf("%d %d\n", P[i], i);
+        }
+    }
+}
