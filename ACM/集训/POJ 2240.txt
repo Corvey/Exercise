@@ -1,0 +1,43 @@
+#include <cstdio>
+#include <map>
+#include <string>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 50;
+double edge[N][N];
+map<string, int> cnt;
+bool judge(int n)
+{
+    for(int i=0; i<n; ++i)
+        if(edge[i][i] > 1)
+            return true;
+    return false;
+}
+int main(void)
+{
+    int n, m, time = 0;
+    double d;
+    string a, b;
+    while(scanf("%d", &n), n)
+    {
+        memset(edge, 0, sizeof(edge));
+        for(int i=0; i<n; ++i)
+        {
+            cin >> a;
+            cnt[a] = i;
+            edge[i][i] = 1;
+        }
+        scanf("%d", &m);
+        for(int i=0; i<m; ++i)
+        {
+            cin >> a >> d >> b;
+            edge[cnt[a]][cnt[b]] = d;
+        }
+        for(int k=0; k<n; ++k)
+            for(int i=0; i<n; ++i)
+                for(int j=0; j<n; ++j)
+                    edge[i][j] = max(edge[i][k] * edge[k][j], edge[i][j]);
+        printf("Case %d: %s\n", ++time, judge(n) ? "Yes" : "No");
+    }
+}
