@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <string.h>
+const int N = 550;
+bool cnt[N] = {0};
+int distance[N][N], D[N];
+int main(void)
+{
+    int time, n, start, tag;
+    scanf("%d", &time);
+    while(time--)
+    {
+        scanf("%d", &n);
+        for(int i=0; i<n; ++i)
+            for(int j=0; j<n; ++j)
+                scanf("%d", &distance[i][j]);
+        memcpy(D, distance[0], sizeof(D));
+        D[0] = 0x3f3f3f3f;
+        start = 0;
+        cnt[0] = true;
+        tag = 0;
+        for(int k=1; k<n; ++k)
+        {
+            for(int i=1; i<n; ++i)
+                if(!cnt[i])
+                    D[i] = distance[start][i] < D[i] ? distance[start][i] : D[i];
+            tag = 0;
+            for(int i=1; i<n; ++i)
+                if(!cnt[i])
+                    tag = D[tag] < D[i] ? tag : i;
+            start = tag;
+            cnt[start] = true;
+        }
+        D[0] = 0;
+        tag = 0;
+        for(int i=1; i<n; ++i)
+            tag = D[i] > D[tag] ? i : tag;
+        printf("%d\n", D[tag]);
+        memset(cnt, 0, sizeof(cnt));
+    }
+}

@@ -1,0 +1,46 @@
+#include <cstdio>
+#include <algorithm>
+#include <string.h>
+using namespace std;
+const int N = 110, INF = 0x3f3f3f3f;
+int D[N][N];
+bool cnt[N] = {0};
+int main(void)
+{
+    int n, m, a, b, start, mintag, sum;
+    while(~scanf("%d", &n))
+    {
+        for(int i=1; i<=n; ++i)
+        {
+            for(int j=1; j<=n; ++j)
+            {
+                scanf("%d", &D[i][j]);
+                if(!D[i][j])
+                    D[i][j] = INF;
+            }
+        }
+        scanf("%d", &m);
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d", &a, &b);
+            D[a][b] = D[b][a] = 0;
+        }
+        start = 1;
+        cnt[start] = true;
+        sum = 0;
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=2; j<=n; ++j)
+                D[1][j] = min(D[1][j], D[start][j]);
+            mintag = 1;
+            for(int j=2; j<=n; ++j)
+                if(!cnt[j] && D[1][j] < D[1][mintag])
+                    mintag = j;
+            cnt[mintag] = true;
+            sum += D[1][mintag];
+            start = mintag;
+        }
+        printf("%d\n", sum);
+        memset(cnt, 0, sizeof(cnt));
+    }
+}

@@ -1,0 +1,75 @@
+#include <cstdio>
+#include <math.h>
+#include <algorithm>
+using namespace std;
+const int N = 1000, INF = 0x3f3f3f3f;
+struct POINT
+{
+    int x;
+    int y;
+}vertex[N];
+double time[N][N] = {0};
+bool cnt[N] = {0};
+void qwe(int& n)
+{
+    int x, y, start, end;
+    while(1)
+    {
+        start = n;
+        for(; ; ++n)
+        {
+            if(!~scanf("%d %d", &x, &y))
+                return ;
+            if(x == -1 && y == -1)
+            {
+                end = n;
+                break;
+            }
+            else
+            {
+                vertex[n].x = x;
+                vertex[n].y = y;
+            }
+        }
+        for(int i=start+1; i<end; ++i)
+        {
+            double dx = (vertex[i].x - vertex[i-1].x) / 1000.0;
+            double dy = (vertex[i].y - vertex[i-1].y) / 1000.0;
+            time[i][i-1] = sqrt(dx*dx + dy*dy) * 1.5;
+            time[i-1][i] = time[i][i-1];
+        }
+    }
+}
+int main(void)
+{
+    scanf("%d %d %d %d", &vertex[0].x, &vertex[0].y, &vertex[1].x, &vertex[1].y);
+    int n = 2, mintag;
+    qwe(n);
+    for(int i=0; i<n; ++i)
+    {
+        time[i][i] = INF;
+        for(int j=0; j<n; ++j)
+        {
+            if(time[i][j] == 0)
+            {
+                double dx = (vertex[i].x - vertex[j].x) / 1000.0;
+                double dy = (vertex[i].y - vertex[j].y) / 1000.0;
+                time[i][j] = sqrt(dx*dx + dy*dy) * 6;
+                time[j][i] = time[i][j];
+            }
+        }
+    }
+    cnt[0] = true;
+    for(int i=1; i<n; ++i)
+    {
+        mintag = 0;
+        for(int j=1; j<n; ++j)
+            if(!cnt[j] && time[0][j] < time[0][mintag])
+                mintag = j;
+        cnt[mintag] = true;
+        for(int j=1; j<n; ++j)
+            if(!cnt[j])
+                time[0][j] = min(time[0][j], time[0][mintag] + time[mintag][j]);
+    }
+    printf("%.0lf\n", time[0][1]);
+}
