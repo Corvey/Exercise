@@ -1,0 +1,57 @@
+#include <cstdio>
+#include <algorithm>
+#include <string.h>
+using namespace std;
+const int N = 1000, M = 10000, INF = 0x3f3f3f3f;
+int from[M], to[M], edge[M];
+bool bellman(int n, int m)
+{
+    int D[N], a, b;
+    memset(D, INF, sizeof(D));
+    D[0] = 0;
+    for(int i=0; i<n-1; ++i)
+    {
+        for(int j=0; j<m; ++j)
+        {
+            a = from[j];
+            b = to[j];
+            D[b] = min(D[a] + edge[j], D[b]);
+        }
+    }
+    for(int j=0; j<m; ++j)
+    {
+        a = from[j];
+        b = to[j];
+        if(D[b] > D[a] + edge[j])
+            return true;
+    }
+    return false;
+}
+int main(void)
+{
+    int kase, n, m, w, a, b, c, num;
+    scanf("%d", &kase);
+    while(kase--)
+    {
+        scanf("%d %d %d", &n, &m, &w);
+        num = 0;
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", &a, &b, &c);
+            from[num] = --a;
+            to[num] = --b;
+            edge[num++] = c;
+            from[num] = b;
+            to[num] = a;
+            edge[num++] = c;
+        }
+        for(int i=0; i<w; ++i)
+        {
+            scanf("%d %d %d", &a, &b, &c);
+            from[num] = --a;
+            to[num] = --b;
+            edge[num++] = 0-c;
+        }
+        printf("%s\n", bellman(n, num) ? "YES" : "NO");
+    }
+}
