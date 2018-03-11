@@ -1,0 +1,45 @@
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+const int N = 110, M = 5000;
+struct SIDE
+{
+    int from;
+    int to;
+    int distance;
+}edge[M];
+int cnt[N];
+bool cmp(const SIDE a, const SIDE b){
+    return a.distance < b.distance;
+}
+int Find(int x){
+    return cnt[x] == x ? x : Find(cnt[x]);
+}
+int main(void)
+{
+    int n, m, a, b, MIN, ok;
+    while(scanf("%d %d", &n, &m), n+m)
+    {
+        for(int i=0; i<m; ++i)
+            scanf("%d %d %d", &edge[i].from, &edge[i].to, &edge[i].distance);
+        sort(edge, edge+m, cmp);
+        MIN = 0x3f3f3f3f;
+        ok = 0;
+        for(int start=0; start<=m-n+1; ++start)
+        {
+            for(int i=1; i<=n; ++i)
+                cnt[i] = i;
+            int i, j = 0;
+            for(i=start; i<m && j<n-1; ++i)
+            {
+                a = Find(edge[i].from);
+                b = Find(edge[i].to);
+                if(a != b)
+                    cnt[b] = a, ++j;
+            }
+            if(j == n-1)
+                MIN = min(MIN, edge[i-1].distance - edge[start].distance), ok = 1;
+        }
+        printf("%d\n", ok ? MIN : -1);
+    }
+}

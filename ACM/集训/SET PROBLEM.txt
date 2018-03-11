@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+int a[200100];
+int cmp(const void *x, const void *y)
+{
+    return (*(int *)x)>(*(int *)y) ? 1 : 0;
+}
+int HalfSearch(int x, int left, int right)
+{
+    int mid = (left+right)/2;
+    if(left > right)
+        return -1;
+    if(x > a[mid])
+        return HalfSearch(x, mid+1, right);
+    else if(x < a[mid])
+        return HalfSearch(x, left, mid-1);
+    else
+        return mid;
+}
+int main(void)
+{
+    int n, m, count;
+    scanf("%d", &n);
+    while(n--)
+    {
+        count = 0;
+        scanf("%d", &m);
+        for(int i=0; i<m; ++i)
+        {
+            int x, y;
+            scanf("%d %d", &x, &y);
+            qsort(a, count, sizeof(int), cmp);
+            for(int j=x; j<=y; ++j)
+                if(HalfSearch(j, 0, count-1) == -1)
+                    a[count] = j, count++;
+        }
+        qsort(a, count, sizeof(int), cmp);
+        scanf("%d", &m);
+        for(int i=0; i<m; ++i)
+        {
+            int x, y;
+            scanf("%d %d", &x, &y);
+            qsort(a, count, sizeof(int), cmp);
+            for(int j=x; j<=y; ++j)
+                if(HalfSearch(j, 0, count-1) == -1)
+                    a[count] = j, count++;
+        }
+        printf("%d\n", count);
+    }
+}
