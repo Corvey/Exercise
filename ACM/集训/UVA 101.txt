@@ -1,0 +1,88 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <cstdio>
+using namespace std;
+int n;
+const int MAX = 30;
+vector<int> pile[MAX];
+
+void FindBlock(int x, int& p, int& h)
+{
+    for(p=0; p<n; ++p)
+        for(h=0; h<pile[p].size(); ++h)
+            if(x == pile[p][h])
+                return ;
+}
+
+void GuiWei(int p, int h)
+{
+    int x;
+    for(int i=h+1; i<pile[p].size(); ++i)
+    {
+        x = pile[p][i];
+        pile[x].push_back(x);
+    }
+    pile[p].resize(h+1);
+}
+
+void PutOn(int p, int h, int p2)
+{
+    for(int i=h; i<pile[p].size(); ++i)
+    {
+        pile[p2].push_back(pile[p][i]);
+    }
+    pile[p].resize(h);
+}
+
+int main()
+{
+    int pa, pb, ha, hb, a, b;
+    string s1, s2;
+    scanf("%d\n", &n);
+    for(int i=0; i<n; ++i)
+        pile[i].push_back(i);
+    while(cin >> s1 >> a >> s2 >> b)
+    {
+        FindBlock(a, pa, ha);
+        FindBlock(b, pb, hb);
+        if(pa == pb)
+            continue;
+        if(s1 == "move")
+        {
+            if(s2 == "onto")
+            {
+                GuiWei(pa, ha);
+                GuiWei(pb, hb);
+                PutOn(pa, ha, pb);
+            }
+            else if(s2 == "over")
+            {
+                GuiWei(pa, ha);
+                PutOn(pa, ha, pb);
+            }
+        }
+        else if(s1 == "pile")
+        {
+            if(s2 == "onto")
+            {
+                GuiWei(pb, hb);
+                PutOn(pa, ha, pb);
+            }
+            else if(s2 == "over")
+            {
+                PutOn(pa, ha, pb);
+            }
+        }
+    }
+    for(int i=0; i<n; ++i)
+    {
+        printf("%d:", i);
+        for(int j=0; j<pile[i].size(); ++j)
+        {
+            printf(" %d", pile[i][j]);
+        }
+        printf("\n");
+    }
+}

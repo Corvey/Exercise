@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+const int N = 110, Infinity = 0x3f3f3f3f;
+struct Point
+{
+    double x;
+    double y;
+}vertex[N];
+double distance[N][N], D[N];
+bool cnt[N] = {0};
+int main(void)
+{
+    //freopen("out.txt", "wt", stdout);
+    int n, start, mintag, time;
+    double sum, x, y;
+    scanf("%d", &time);
+    while(time--)
+    {
+        scanf("%d", &n);
+        for(int i=0; i<n; ++i)
+            scanf("%lf %lf", &vertex[i].x, &vertex[i].y);
+        for(int i=0; i<n; ++i)
+        {
+            distance[i][i] = Infinity;
+            for(int j=i+1; j<n; ++j)
+            {
+                //distance[i][j] = hypot(vertex[i].x - vertex[j].x, vertex[i].y - vertex[j].y);
+                x = vertex[i].x - vertex[j].x;
+                y = vertex[i].y - vertex[j].y;
+                distance[i][j] = sqrt(x*x + y*y);
+                distance[j][i] = distance[i][j];
+            }
+        }
+        sum = 0;
+        start = 0;
+        cnt[0] = true;
+        memcpy(D, distance[0], sizeof(D));
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=1; j<n; ++j)
+            {
+                if(!cnt[j] && distance[start][j] < D[j])
+                    D[j] = distance[start][j];
+            }
+            mintag = 0;
+            for(int j=1; j<n; ++j)
+            {
+                if(cnt[j])
+                    continue;
+                if(D[j] < D[mintag])
+                    mintag = j;
+            }
+            cnt[mintag] = true;
+            sum += D[mintag];
+            start = mintag;
+        }
+        memset(cnt, 0, sizeof(cnt));
+        printf("%.2lf\n", sum);
+        if(time)
+            printf("\n");
+    }
+}

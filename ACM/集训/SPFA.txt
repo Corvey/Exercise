@@ -1,0 +1,72 @@
+先用邻接表存储图
+将原点入队
+循环直至队空
+{
+	取出首元素u
+	用u点当前的最短路径估计值对离开u点所指向的结点v进行松弛操作
+	如果v点的最短路径估计值有所调整，且v点不在当前的队列中，就将v点放入队尾
+	更新记录到v点的最短路径所包含的路径条数，若 >n，说明存在负权回路
+}
+
+#include <cstdio>
+#include <string.h>
+#include <queue>
+#include <algorithm>
+using namespace std;
+const int N = 110, M = 1100, INF = 0x3f3f3f3f;
+int first[N], u[M], v[M], w[M], Next[M];
+bool SPFA(int n)
+{
+    bool cnt[N] = {0};
+    int D[N], num[N] = {0}, x;
+    queue<int> q;
+    memset(D, INF, sizeof(D));
+    D[0] = 0;
+    cnt[0] = true;
+    q.push(0);
+    while(!q.empty())
+    {
+        x = first[q.front()];
+        while(~x)
+        {
+            if(D[u[x]] + w[x] < D[v[x]])
+            {
+                D[v[x]] = D[u[x]] + w[x];
+                num[v[x]] = num[u[x]] + 1;
+                if(num[v[x]] > n)
+                {
+                    printf("负权回路\n");
+                    return false;
+                }
+                if(!cnt[v[x]])
+                {
+                    q.push(v[x]);
+                    cnt[v[x]] = true;
+
+                }
+            }
+            x = Next[x];
+        }
+        cnt[q.front()] = false;
+        q.pop();
+    }
+    for(int i=0; i<n; ++i)
+        printf("%d ", D[i]);
+    printf("\n");
+}
+int main(void)
+{
+    int n, m;
+    while(scanf("%d %d", &n, &m), n+m)
+    {
+        memset(first, -1, sizeof(first));
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", u+i, v+i, w+i);
+            --u[i], --v[i];
+            Next[i] = first[u[i]];
+            first[u[i]] = i;
+        }
+        SPFA(n);
+    }
+}
