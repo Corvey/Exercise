@@ -1,0 +1,58 @@
+#include <cstdio>
+#include <queue>
+#include <string.h>
+#include <vector>
+using namespace std;
+const int N = 110, M = 1100;
+int u[M], v[M], first[N], Next[M], in[N];
+struct cmp
+{
+    bool operator () (const int a, const int b) const{
+        return in[a] == in[b] ? a > b : in[a] > in[b];
+    }
+};
+bool DelEdge(int x)
+{
+    --in[ v[x] ];
+    return Next[x] == -1 ? 0 : DelEdge(Next[x]);
+}
+void TPSort(int n)
+{
+    int x;
+    priority_queue<int, vector<int>, cmp> pq;
+    for(int i=0; i<n; ++i)
+        pq.push(i);
+    while(pq.size() != 1)
+    {
+        x = pq.top();
+        pq.pop();
+        if(!in[x])
+        {
+            if(~first[x])
+                DelEdge(first[x]);
+            printf("%d ", x+1);
+        }
+    }
+    printf("%d\n", pq.top()+1);
+    pq.pop();
+}
+int main(void)
+{
+    int n, m;
+    while(1)
+    {
+        scanf("%d %d", &n, &m);
+        if(!n && !m)
+            break;
+        memset(first, -1, sizeof(first));
+        memset(in, 0, sizeof(in));
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d", u+i, v+i);
+            --u[i], --v[i], ++in[ v[i] ];
+            Next[i] = first[ u[i] ];
+            first[ u[i] ] = i;
+        }
+        TPSort(n);
+    }
+}
