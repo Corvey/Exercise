@@ -1,0 +1,38 @@
+#include <cstdio>
+#include <queue>
+using namespace std;
+
+queue<int> s;
+int main(void)
+{
+    int n, x;
+    while(1)
+    {
+        scanf("%d", &n);
+        if(!n)
+            break;
+        else if(n==1)
+            printf("Discarded cards:\nRemaining card: 1\n");
+        else
+        {
+            for(int i = 1; i <= n; ++i)
+            {
+                s.push(i);
+            }
+            printf("Discarded cards:");
+            while(s.size() != 2)
+            {
+                printf(" %d,", s.front());
+                s.pop();
+                x = s.front();
+                s.push(x);
+                s.pop();
+            }
+            x = s.front();
+            s.pop();
+            printf(" %d\n", x);
+            printf("Remaining card: %d\n", s.front());
+            s.pop();
+        }
+    }
+}
