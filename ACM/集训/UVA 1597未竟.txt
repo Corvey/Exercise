@@ -1,0 +1,205 @@
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+const int MAX = 100;
+vector<string>text[MAX];
+vector<int>article[MAX];
+vector<set<string>>line;
+map<int, string>nline;
+
+void FindWord(string s, int n)
+{
+    int flag1, flag2=0, x;
+    for(int i=0; i<n; ++i)
+    {
+        flag1 = 0;
+        for(int j=0; j<article[i].size(); ++j)
+        {
+            x = article[i][j];
+            for(set<string>::iterator it = line[x].begin(); it != line[x].end(); ++it)
+            {
+                if(*it == s)
+                {
+                    cout << nline[x] << "\n";
+                    flag1 = 1;
+                    flag2 = 1;
+                }
+            }
+        }
+        if(flag1)
+            cout << "----------\n";
+    }
+    if(flag2)
+        cout << "==========\n";
+    else
+        cout << "Sorry, I found nothing.\n==========\n";
+}
+
+void FindBoth(string s1, string s2, int n)
+{
+    int flag1, flag2=0, nfind, x;
+    for(int i=0; i<n; ++i)
+    {
+        flag1 = 0;
+        nfind = 0;
+        for(int j=0; j<article[i].size(); ++j)
+        {
+            x = article[i][j];
+            for(set<string>::iterator it = line[x].begin(); it != line[x].end(); ++it)
+            {
+                if(*it == s1)
+                    ++nfind;
+                if(*it == s2)
+                    ++nfind;
+                if(nfind == 2)
+                {
+                    cout << nline[x] << "\n";
+                    flag1 = 1;
+                    flag2 = 1;
+                }
+            }
+        }
+        if(flag1)
+            cout << "----------\n";
+    }
+    if(flag2)
+        cout << "==========\n";
+    else
+        cout << "Sorry, I found nothing.\n==========\n";
+}
+
+void FindEither(string s1, string s2, int n)
+{
+    int flag1, flag2=0, x;
+    for(int i=0; i<n; ++i)
+    {
+        flag1 = 0;
+        for(int j=0; j<article[i].size(); ++j)
+        {
+            x = article[i][j];
+            for(set<string>::iterator it = line[x].begin(); it != line[x].end(); ++it)
+            {
+                if(*it == s1 || *it == s2)
+                {
+                    cout << nline[x] << "\n";
+                    flag1 = 1;
+                    flag2 = 1;
+                }
+            }
+        }
+        if(flag1)
+            cout << "----------\n";
+    }
+    if(flag2)
+        cout << "==========\n";
+    else
+        cout << "Sorry, I found nothing.\n==========\n";
+}
+
+void FindExcept(string s, int n)
+{
+    int flag1, flag2=0, x;
+    for(int i=0; i<n; ++i)
+    {
+        flag1 = 0;
+        for(int j=0; j<article[i].size(); ++j)
+        {
+            x = article[i][j];
+            for(set<string>::iterator it = line[x].begin(); it != line[x].end(); ++it)
+            {
+                if(*it == s)
+                {
+                    flag1 = 1;
+                    break;
+                }
+            }
+        }
+        if(!flag1)
+        {
+            flag2 = 1;
+            for(int j=0; j<article[i].size(); ++j)
+                cout << text[i][article[i][j]] << "\n";
+        }
+    }
+    if(flag2)
+        cout << "==========\n";
+    else
+        cout << "Sorry, I found nothing.\n==========\n";
+}
+
+int main(void)
+{
+    int n, m, AllLines = 0;
+    string s, buff;
+    set<string>words;
+    cin >> n;
+    for(int i=0; i<n; ++i)
+    {
+        for(; ; ++AllLines)
+        {
+            getline(cin, s);
+            if(s == "**********")
+                break;
+            text[i].push_back(s);
+            nline[AllLines] = s;
+            article[i].push_back(AllLines);
+            for(int i=0; i<s.length(); ++i)
+            {
+                if(isalpha(s[i]))
+                    s[i] = tolower(s[i]);
+                else
+                    s[i] = ' ';
+            }
+            stringstream ss(s);
+            while(ss >> buff)
+                words.insert(buff);
+            line.push_back(words);
+            words.clear();
+        }
+    }
+    /*
+    for(int i=0; i<n; ++i)//查看文章
+    {
+        for(int j=0; j<text[i].size(); ++j)
+            cout << text[i][j] << "\n";
+    }
+    */
+    /*
+    for(int i=0; i<line.size(); ++i)//查看map
+    {
+        for(set<string>::iterator it = line[i].begin(); it != line[i].end(); ++it)
+            cout << *it << "\n";
+        cout << "---------\n";
+    }
+    */
+    cin >> m;
+    string a, b;
+    while(m--)
+    {
+        cin >> a;
+        if(a == "NOT")
+        {
+            cin >> b;
+            FindExcept(b, n);
+        }
+        else
+        {
+            if(getchar() == '\n')
+                FindWord(a, n);
+            else
+            {
+                cin >> s >> b;
+                if(s == "AND")
+                    FindBoth(a, b, n);
+                else
+                    FindEither(a, b, n);
+            }
+        }
+    }
+}

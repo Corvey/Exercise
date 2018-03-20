@@ -1,0 +1,30 @@
+#include <cstdio>
+using namespace std;
+
+int main()
+{
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
+    long long ans, MAX;
+    int n, a[20];
+    for(int t=1; ~scanf("%d", &n); ++t)
+    {
+        for(int i=0; i<n; ++i)
+            scanf("%d", a+i);
+        MAX = 0;
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=i; j<n; ++j)
+            {
+                ans = 1;
+                for(int k=i; k<=j; ++k)
+                {
+                    ans *= a[k];
+                }
+                if(ans > MAX)
+                    MAX = ans;
+            }
+        }
+        printf("Case #%d: The maximum product is %lld.\n\n", t, MAX);
+    }
+}
