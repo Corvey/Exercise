@@ -1,0 +1,55 @@
+#include <cstdio>
+using namespace std;
+
+int PN[31] = {0}, a[16];
+
+void qwe(int n, int cur)
+{
+    if(n == cur)
+    {
+        if(PN[ a[n-1]+a[0] ])
+        {
+            printf("%d", a[0]);
+            for(int i=1; i<n; ++i)
+                printf(" %d", a[i]);
+            printf("\n");
+        }
+    }
+    else
+    {
+        for(int i=1; i<=n; ++i)
+        {
+            int ok = 1;
+            for(int j=0; j<cur; ++j)
+            {
+                if(a[j] == i)
+                    ok = 0;
+            }
+            if(ok && PN[ a[cur-1]+i ])
+            {
+                a[cur] = i;
+                qwe(n, cur+1);
+            }
+        }
+    }
+}
+int main(void)
+{
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
+    int n, kase = 0;
+    PN[2] = PN[3] = PN[5] = PN[7] = PN[11] = PN[13] = PN[17] = PN[19] = PN[23] = PN[29] = PN[31] = 1;
+    while(~scanf("%d", &n))
+    {
+        if(kase)
+            printf("\n");
+        if(n==1)
+            printf("Case %d:\n1\n", ++kase);
+        else
+        {
+            printf("Case %d:\n", ++kase);
+            a[0] = 1;
+            qwe(n, 1);
+        }
+    }
+}

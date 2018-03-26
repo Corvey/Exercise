@@ -1,0 +1,70 @@
+#include <cstdio>
+#include <string>
+#include <map>
+#include <queue>
+#include <iostream>
+using namespace std;
+struct NODE
+{
+    string str;
+    int time;
+    int Zero;
+};
+string aim;
+map<string, int> vis;
+queue<NODE> FIND;
+NODE SWAP(NODE x, int n)
+{
+    x.str[x.Zero] = x.str[n];
+    x.str[n] = '0';
+    x.Zero = n;
+    ++x.time;
+    return x;
+}
+bool Judge(NODE x)
+{
+    if(x.str == aim)
+    {
+        cout << "Work time: " << x.time << endl;
+        while(!FIND.empty())
+            FIND.pop();
+        return true;
+    }
+    if(!vis[x.str])
+    {
+        vis[x.str] = 1;
+        FIND.push(x);
+    }
+    return false;
+}
+void Work(NODE x)
+{
+    int t = x.Zero;
+    if( t-3 >= 0 && Judge(SWAP(x, t-3)))
+       return ;
+    if( t%3 && Judge(SWAP(x, t-1)))
+       return ;
+    if( (t+1)%3 && Judge(SWAP(x, t+1)))
+       return ;
+    if( t+3 <= 9 && Judge(SWAP(x, t+3)))
+       return ;
+}
+int main(void)
+{
+    NODE temp;
+    while(cin >> temp.str >> aim)
+    {
+        temp.time = 0;
+        for(temp.Zero=0; temp.str[temp.Zero]!='0'; ++temp.Zero);
+        FIND.push(temp);
+        while(1)
+        {
+            Work(FIND.front());
+            if(FIND.empty())
+                break;
+            FIND.pop();
+        }
+        vis.clear();
+        cout << "done" << endl;
+    }
+}

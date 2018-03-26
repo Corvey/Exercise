@@ -1,0 +1,55 @@
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+int mark[10];
+bool judge(int a, int b)
+{
+    memset(mark, 0, sizeof(mark));
+    if(a > 98765)
+        return false;
+    if(b < 10000)
+        mark[0] = 1;
+    while(a)
+    {
+        mark[a%10] = 1;
+        a /= 10;
+    }
+    while(b)
+    {
+        mark[b%10] = 1;
+        b /= 10;
+    }
+    int t=0;
+    for(int i=0; i<10; ++i)
+        if(mark[i])
+            ++t;
+    return t==10;
+}
+
+int main()
+{
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
+    int n, a, b, flag=-1;
+    while(1)
+    {
+        scanf("%d", &n);
+        if(!n)
+            break;
+        if(~flag)
+            printf("\n");
+        flag = 0;
+        for(b=1234; b<=98765; ++b)
+        {
+            a = b*n;
+            if(judge(a, b))
+            {
+                flag = 1;
+                printf("%05d / %05d = %d\n", a, b, n);
+            }
+        }
+        if(!flag)
+            printf("There are no solutions for %d.\n", n);
+    }
+}
