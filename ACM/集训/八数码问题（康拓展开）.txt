@@ -1,0 +1,174 @@
+#include <cstdio>
+#include <vector>
+#include <math.h>
+#include <queue>
+#include <string.h>
+using namespace std;
+const int Fac[] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320};
+const int N = 8;
+int ans, vis[362880] = {0};
+char str[N+1];
+
+struct NODE
+{
+    int pos;
+    int space;
+    int time;
+};
+
+queue<NODE> FIND;
+
+NODE SWAP(NODE x, int target)
+{
+    sprintf(str, "%09d", x.pos);
+    str[x.space] ^= str[target], str[target] ^= str[x.space], str[x.space] ^= str[target];
+    x.pos = 0;
+    for(int i=0; i<=N; ++i)
+        x.pos = x.pos*10 + str[i] - '0';
+    x.space = target;
+    ++x.time;
+    return x;
+}
+
+int DeCode(int n)
+{
+    int x, ans=0;
+    vector<int> s;
+    for(int i=0; i<=N; ++i)
+        s.push_back(i);
+    for(int i=N; n; --i)
+    {
+        x = n % Fac[i];
+        n /= Fac[i];
+        ans = ans*10 + s[n];
+        s.erase(s.begin()+n);
+        n = x;
+    }
+    while(!s.empty())
+    {
+        ans = ans*10 + s[0];
+        s.erase(s.begin());
+    }
+    return ans;
+}
+
+int EnCode(int x)
+{
+    int n = x < 1e8 ? 1e7 : 1e8;
+    int ans = 0, t, i, j;
+    vector<int> s;
+    if(n==1e7)
+        for(i=1; i<=N; ++i)
+            s.push_back(i);
+    else
+        for(i=0; i<=N; ++i)
+            s.push_back(i);
+    for(j=N; n; --j)
+    {
+        t = x / n;
+        x -= t * n;
+        n /= 10;
+        for(i=0; s[i] != t; ++i);
+        s.erase(s.begin()+i);
+        ans += i * Fac[j];
+    }
+    return ans;
+}
+
+void Judge(NODE x)
+{
+    if(x.pos == ans)
+    {
+        printf("pos:%d\ntime:%d\n", x.pos, x.time);
+        return ;
+    }
+    int code = EnCode(x.pos);
+    if(vis[code])
+        return;
+    else
+    {
+        vis[code] = 1;
+        FIND.push(x);
+    }
+}
+
+void Work(NODE x)
+{
+    switch (x.space)
+    {
+    case 0:
+        Judge(SWAP(x, 1));
+        Judge(SWAP(x, 3));
+        break;
+
+    case 1:
+        Judge(SWAP(x, 0));
+        Judge(SWAP(x, 2));
+        Judge(SWAP(x, 4));
+        break;
+
+    case 2:
+        Judge(SWAP(x, 1));
+        Judge(SWAP(x, 5));
+        break;
+
+    case 3:
+        Judge(SWAP(x, 0));
+        Judge(SWAP(x, 4));
+        Judge(SWAP(x, 6));
+        break;
+
+    case 4:
+        Judge(SWAP(x, 1));
+        Judge(SWAP(x, 3));
+        Judge(SWAP(x, 5));
+        Judge(SWAP(x, 7));
+        break;
+
+    case 5:
+        Judge(SWAP(x, 2));
+        Judge(SWAP(x, 4));
+        Judge(SWAP(x, 8));
+        break;
+
+    case 6:
+        Judge(SWAP(x, 3));
+        Judge(SWAP(x, 7));
+        break;
+
+    case 7:
+        Judge(SWAP(x, 4));
+        Judge(SWAP(x, 6));
+        Judge(SWAP(x, 8));
+        break;
+
+    case 8:
+        Judge(SWAP(x, 5));
+        Judge(SWAP(x, 7));
+        break;
+
+    default:
+        break;
+    }
+}
+
+int main(void)
+{
+    NODE start;
+    int x;
+    while(~scanf("%d %d", &start.pos, &ans))
+    {
+        memset(vis, 0, sizeof(vis));
+        sprintf(str, "%09d", start.pos);
+        for(x=0; str[x]!='0'; ++x);
+        start.space = x;
+        start.time = 0;
+        FIND.push(start);
+        while(!FIND.empty())
+        {
+            Work(FIND.front());
+            FIND.pop();
+        }
+        printf("done\n\n");
+    }
+}
