@@ -1,0 +1,41 @@
+#include <stdio.h>
+int a[100000], b[100000];
+int GCD(int x, int y)
+{
+    return y==0 ? x : GCD(y, x%y);
+}
+int main(void)
+{
+    int n, count;
+    while(~scanf("%d", &n))
+    {
+        count = 0;
+        for(int i=1; i<=n; ++i)
+        {
+            for(int j=0; j<=i; ++j)
+            {
+                if(GCD(j, i)<=1)
+                {
+                    a[count] = j;
+                    b[count] = i;
+                    count++;
+                }
+            }
+        }
+        for(int i=0; i<count-1; ++i)
+        {
+            for(int j=0; j<count-1-i; ++j)
+            {
+                if((double)a[j]/b[j] > (double)a[j+1]/b[j+1])
+                {
+                    a[j] ^= a[j+1], a[j+1] ^= a[j], a[j] ^= a[j+1];
+                    b[j] ^= b[j+1], b[j+1] ^= b[j], b[j] ^= b[j+1];
+                }
+            }
+        }
+        for(int i=0; i<count; ++i)
+        {
+            printf("%d/%d\n", a[i], b[i]);
+        }
+    }
+}
