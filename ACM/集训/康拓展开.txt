@@ -1,0 +1,60 @@
+#include <cstdio>
+#include <math.h>
+#include <vector>
+using namespace std;
+const int Fac[] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320};
+const int N = 8;
+
+int DeCode(int n)
+{
+    int x, ans=0;
+    vector<int> s;
+    for(int i=0; i<=N; ++i)
+        s.push_back(i);
+    for(int i=N; n; --i)
+    {
+        x = n % Fac[i];
+        n /= Fac[i];
+        ans = ans*10 + s[n];
+        s.erase(s.begin()+n);
+        n = x;
+    }
+    while(!s.empty())
+    {
+        ans = ans*10 + s[0];
+        s.erase(s.begin());
+    }
+    return ans;
+}
+
+int EnCode(int x)
+{
+    int n = x < 1e8 ? 1e7 : 1e8;
+    int ans = 0, t, i, j;
+    vector<int> s;
+    if(n==1e7)
+        for(i=1; i<=N; ++i)
+            s.push_back(i);
+    else
+        for(i=0; i<=N; ++i)
+            s.push_back(i);
+    for(j=N; n; --j)
+    {
+        t = x / n;
+        x -= t * n;
+        n /= 10;
+        for(i=0; s[i] != t; ++i);
+        s.erase(s.begin()+i);
+        ans += i * Fac[j];
+    }
+    return ans+1;
+}
+
+int main(void)
+{
+    int n;
+    while(~scanf("%d", &n))
+    {
+        printf("%d\n", EnCode(n));
+    }
+}

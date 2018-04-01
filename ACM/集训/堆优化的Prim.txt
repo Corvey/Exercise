@@ -1,0 +1,56 @@
+#include <cstdio>
+#include <string.h>
+#include <queue>
+#include <vector>
+#include <algorithm>
+using namespace std;
+const int N = 1e5+1e4, M = 2e6+2e5, INF = 0x3f3f3f3f;
+int u[M], v[M], w[M], Next[M], first[N];
+struct cmp{
+    bool operator () (const int a, const int b) const{
+        return w[a] > w[b];
+    }
+};
+int Prim(int n)
+{
+    priority_queue<int, vector<int>, cmp> pq;
+    bool vis[N] = {0};
+    int x, sum = 0;
+    vis[0] = true;
+    for(int i=first[0]; ~i; i=Next[i])
+        pq.push(i);
+    for(int i=1; i<n; )
+    {
+        x = pq.top();
+        pq.pop();
+        if(vis[v[x]])
+            continue;
+        vis[v[x]] = true;
+        ++i;
+        sum += w[x];
+        for(int j=first[v[x]]; ~j; j=Next[j])
+            if(!vis[v[j]])
+                pq.push(j);
+    }
+    return sum;
+}
+int main(void)
+{
+    int n, m, num;
+    while(~scanf("%d %d", &n, &m))
+    {
+        memset(first, -1, sizeof(first));
+        num = 0;
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", u+num, v+num, w+num);
+            --u[num], --v[num];
+            Next[num] = first[u[num]];
+            first[u[num]] = num++;
+            u[num] = v[num-1], v[num] = u[num-1], w[num] = w[num-1];
+            Next[num] = first[u[num]];
+            first[u[num]] = num++;
+        }
+        printf("%d\n", Prim(n));
+    }
+}
