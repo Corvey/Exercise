@@ -1,0 +1,28 @@
+#include <cstdio>
+using namespace std;
+
+int main(void)
+{
+    long long int n, len, F1, L1;
+    while(~scanf("%lld", &n))
+    {
+        for(len=0; n>>len; ++len);
+        if(!n)
+            printf("0\n");
+        else if(n == 1<<len-1ll)
+            printf("%lld\n", n<<1ll);
+        else if(n == (1<<len)-1 )
+            printf("%lld\n", (1<<len)+(1<<len-1)-1ll);
+        else
+        {
+            for(F1=0; (!(n>>F1&1)) || n>>F1+1&1; ++F1);
+            if(F1 != len-1)
+                printf("%lld\n", n-(1<<F1)|1<<F1+1ll);
+            else
+            {
+                for(L1=0; !(n>>L1&1); ++L1);
+                printf("%lld\n", 1<<len|(1<<F1-L1)-1ll);
+            }
+        }
+    }
+}

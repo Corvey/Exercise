@@ -1,0 +1,72 @@
+先通过邻接表记录图
+再把入度为0的顶点入队
+循环直到队空
+{
+	记录首元素到拓扑序列
+	依次删除首元素的边，并判断删除边后的点是否入度为0，若是则入队
+	首元素出队
+}
+判断出队元素个数是否等于总顶点数，若是则拓扑排序完毕，否则图中存在回路
+
+#include <cstdio>
+#include <queue>
+#include <string.h>
+#include <vector>
+using namespace std;
+const int N = 110, M = 1100;
+int u[M], v[M], first[N], Next[M], in[N];
+struct cmp
+{
+    bool operator () (const int a, const int b) const{
+        return a > b;
+    }
+};
+void TPSort(int n)
+{
+    int x, t, topo[N], num;
+    priority_queue<int, vector<int>, cmp> pq;
+    for(int i=0; i<n; ++i)
+        if(!in[i])
+            pq.push(i);
+    for(num = 0; !pq.empty(); ++num)
+    {
+        x = pq.top();
+        pq.pop();
+        t = first[x];
+        while(~t)
+        {
+            if(!--in[v[t]])
+                pq.push(v[t]);
+            t = Next[t];
+        }
+        topo[num] = x+1;
+    }
+    if(num - n)
+        printf("有回路！\n");
+    else
+    {
+        for(int i=0; i<n; ++i)
+            printf("%d\t", topo[i]);
+        printf("\n");
+    }
+}
+int main(void)
+{
+    int n, m;
+    while(1)
+    {
+        scanf("%d %d", &n, &m);
+        if(!n && !m)
+            break;
+        memset(first, -1, sizeof(first));
+        memset(in, 0, sizeof(in));
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d", u+i, v+i);
+            --u[i], --v[i], ++in[ v[i] ];
+            Next[i] = first[ u[i] ];
+            first[ u[i] ] = i;
+        }
+        TPSort(n);
+    }
+}

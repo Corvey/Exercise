@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#define INFINITY 250000000
+int done[8] = {0}, P[7] = {0}, MinP[7] = {0}, n;
+double side[8][8], min=INFINITY;
+double DFS(int i, double sum, int count)
+{
+    if(count < n-1)
+    {
+        for(int j=1; j<n; ++j)
+        {
+            if(!done[j])
+            {
+                done[j] = 1;
+                P[count] = j;
+                DFS(j, sum+side[i][j], ++count);
+            }
+        }
+    }
+    else if(count == n-1)
+    {
+        if(min > sum)
+        {
+            min = sum;printf("%.2lf\n", min);
+            memcpy(MinP, P, sizeof(MinP));
+        }
+        memset(done, 0, sizeof(done));
+    }
+}
+int main(void)
+{
+    int x, y, a[8][2];
+    while(~scanf("%d", &n))
+    {
+        for(int i=0; i<n; ++i)
+            scanf("%d %d", &a[i][0], &a[i][1]);
+        for(int i=0; i<n; ++i)
+        {
+            side[i][i] = INFINITY;
+            for(int j=i+1; j<n; ++j)
+            {
+                x = a[i][0] - a[j][0];
+                y = a[i][1] - a[j][1];
+                side[i][j] = hypot(x, y);
+                side[j][i] = side[i][j];
+            }
+        }
+        ///*
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                printf("%.2lf ", side[i][j]);
+            }
+            printf("\n");
+        }
+        //*/
+        DFS(0, 0, 0);
+        for(int i=0; i<n-1; ++i)
+        {
+            printf("%d ", MinP[i]);
+        }
+        printf("\n%.2lf\n", min);
+    }
+}
