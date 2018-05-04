@@ -1,0 +1,80 @@
+题意
+T组测试数据，每组数据给你n(0<n<=1000)个无符号整型范围内的数，把这些数字任意排列后连接成一个大数，求能排出的所有数当中最大的与最小的两个数的差值。
+例如{1, 2}, 最大为21，最小为12，差值为9。
+
+样例输入
+1
+3
+1 2 3
+
+样例输出
+198
+
+思路
+乍一看是个大数问题，然而后来发现排序才是这道题的重点。
+
+一开始想的是按数字的大小排序，但显然不对。例如{9, 10}，按数字排序的话9 < 10，所以最小值为910，但是显然109更小。
+
+后来想到按字典序排，并且深信不疑的WA了N次(0﹏0)
+例如{9, 90}，按字典序排的话是9 < 90，所以最小值为990，但显然909更小。
+
+最后才想到要把两个字符串拼接以后再按字典序排。例如{567, 5674}就比较5675674和5674567哪个更小，显然后者小，所以排序后的结果应为{5674, 567}。
+
+用C++的string的话可以很优美的实现这个比较函数。
+bool cmp(const string a, const string b){
+    return (a+b) < (b+a);
+}
+然而不知道是C++的读入太慢还是string慢，居然超时了(⊙o⊙)
+然而加上一句取消cin与stdin同步以后就险过了~~~2644ms(时限3000ms)
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+#include <string>
+using namespace std;
+const int N = 1e3+10;
+string str[N], sMax, sMin;
+bool cmp(const string a, const string b){
+    return (a+b) < (b+a);
+}
+void Subtract(void)
+{
+    int len = sMax.length();
+    for(int i=len-1; i; --i)
+    {
+        if(sMax[i] >= sMin[i])
+            sMax[i] -= sMin[i] - '0';
+        else
+            sMax[i] -= sMin[i] - 10 - '0', --sMax[i-1];
+    }
+    sMax[0] -= sMin[0] - '0';
+    int i;
+    for(i=0; i<len && sMax[i] == '0'; ++i);
+    if(i == len)
+        cout << 0 << endl;
+    else
+    {
+        for(; i<len; ++i)
+            cout << sMax[i];
+        cout << endl;
+    }
+}
+int main(void)
+{
+    std::ios::sync_with_stdio(false);
+    int kase, n;
+    cin >> kase;
+    while(kase--)
+    {
+        cin >> n;
+        for(int i=0; i<n; ++i)
+            cin >> str[i];
+        sort(str, str+n, cmp);
+        sMax = sMin = "";
+        for(int i=0; i<n; ++i)
+            sMin += str[i];
+        for(int i=n-1; i>=0; --i)
+            sMax += str[i];
+        Subtract();
+    }
+}
+        
