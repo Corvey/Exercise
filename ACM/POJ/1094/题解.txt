@@ -1,0 +1,49 @@
+题意
+输入n, m，前者表示有多少个大写英文字母（从A开始），后者表示下面有多少个大小关系式子，然后根据给定的大小关系式子判断是否能得出他们的大小关系。若能求出，则说明从第几条式子起就已经可以确定关系；若存在矛盾，则说明从第几条式子起存在矛盾；若不能求出则直接说明。
+
+样例输入
+4 6
+A<B
+A<C
+B<C
+C<D
+B<D
+A<B
+3 2
+A<B
+B<A
+26 1
+A<Z
+0 0
+
+样例输出
+Sorted sequence determined after 4 relations: ABCD.
+Inconsistency found after 2 relations.
+Sorted sequence cannot be determined.
+
+思路
+题目重点在于要求出经过多少个式子后就能得出结论。因此，每读入一个式子就应进行一次拓扑排序。
+在拓扑排序的循环中，若每次循环只有一个入度为0的点，则说明大小关系已确定；否则说明大小关系无法确定。若拓扑排序，则说明存在回路，即大小关系存在矛盾。
+
+注意点
+先判断是否存在矛盾，再判断是否确定关系，最后才判断是否不能确定关系。举个例子
+6 6
+A<F
+B<D
+C<E
+F<D
+D<E
+E<F
+output：
+Inconsistency found after 6 relations.
+矛盾和多选同时存在时，优先判断是否矛盾
+
+5 5
+A<B
+B<C
+C<D
+D<E
+E<A
+output:
+Sorted sequence determined after 4 relations: ABCDE
+在矛盾之前如果有成功的，算是成功
