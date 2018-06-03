@@ -1,0 +1,87 @@
+#include <cstdio>
+#include <cstdlib>
+#include <string.h>
+#include <queue>
+using namespace std;
+
+const int N = 510, INF = 0x3f3f3f3f;
+int graph[N][N];
+
+void SPFA(int n)
+{
+    queue<int> q;
+    bool vis[N] = {0};
+    vis[0] = true;
+    int D[N];
+    for(int i=0; i<n; ++i)
+    {
+        D[i] = graph[0][i];
+        if(graph[0][i] != INF)
+        {
+            q.push(i);
+            vis[i] = true;
+        }
+    }
+    while(!q.empty())
+    {
+        int x = q.front();
+        for(int i=0; i<n; ++i)
+        {
+            int dis = D[x] + graph[x][i];
+            if(dis < D[i])
+            {
+                D[i] = dis;
+                if(!vis[i])
+                {
+                    q.push(i);
+                    vis[i] = true;
+                }
+            }
+        }
+        q.pop();
+        vis[x] = false;
+    }
+    D[0] = 0;
+    int Max1 = 0, Max2 = 0, sum, tag1, tag21, tag22;
+    for(int i=1; i<n; ++i)
+        if(D[i] > Max1)
+            Max1 = D[i], tag1 = i;
+    for(int i=0; i<n; ++i)
+    {
+        for(int j=i+1; j<n; ++j)
+        {
+            if(graph[i][j] != INF)
+                sum = D[i] + D[j] + graph[i][j];
+            if(sum > Max2)
+                Max2 = sum, tag21 = i, tag22 = j;
+        }
+    }
+    double ans = (double)Max2 / 2;
+    if(ans <= (double)Max1)
+        printf("The last domino falls after %.1lf seconds, at key domino %d.\n\n", (double)Max1, tag1+1);
+    else
+        printf("The last domino falls after %.1lf seconds, between key dominoes %d and %d.\n\n", ans, tag21+1, tag22+1);
+    return ;
+}
+
+int main(void)
+{
+    int n, m, u, v, w;
+    for(int t=0; scanf("%d %d", &n, &m), n+m; )
+    {
+        memset(graph, INF, sizeof(graph));
+        for(int i=0; i<m; ++i)
+        {
+            scanf("%d %d %d", &u, &v, &w);
+            --u, --v;
+            graph[u][v] = w;
+            graph[v][u] = w;
+        }
+        printf("System #%d\n", ++t);
+        if(n == 1)
+            printf("The last domino falls after 0.0 seconds, at key domino 1.\n\n");
+        else
+            SPFA(n);
+    }
+    return 0;
+}
