@@ -1,0 +1,65 @@
+#include <cstdio>
+#include <cstdlib>
+#include <math.h>
+#include <vector>
+#include <queue>
+using namespace std;
+const int N = 1010;
+int xisland[N], yisland[N];
+
+struct node{
+    double left, right;
+}node[N];
+
+struct cmp{
+    bool operator () (const int a, const int b) const{
+        return node[a].left > node[b].left ? 1 : node[a].left == node[b].left ? node[a].right < node[b].right : 0;
+}};
+
+double range(int y, int rf){
+    return sqrt(rf - pow((double)y, 2));
+}
+
+void work(int n, int d, int rf, int kase)
+{
+    int num = 0;
+    double temp, l, r;
+    priority_queue<int, vector<int>, cmp> pq;
+    for(int i=0; i<n; ++i)
+    {
+        scanf("%d %d", xisland+i, yisland+i);
+        if(yisland[i] > d)
+        {
+            for(++i; i<n; ++i)
+                scanf("%d %d", xisland+i, yisland+i);
+            printf("Case %d: -1\n", kase);
+            return ;
+        }
+        temp = range(yisland[i], rf);
+        node[i].left = (double)xisland[i] - temp;
+        node[i].right = (double)xisland[i] + temp;
+        pq.push(i);
+        printf("%d %lf %lf\n", kase, node[i].left, node[i].right);
+    }
+    for(; !pq.empty(); ++num)
+    {
+        l = node[pq.top()].left;
+        r = node[pq.top()].right;
+        pq.pop();
+        while(!pq.empty() && node[pq.top()].left <= r)
+        {
+            l = node[pq.top()].left > l ? node[pq.top()].left : l;
+            r = node[pq.top()].right < r ? node[pq.top()].right : r;
+            pq.pop();
+        }
+    }
+    printf("Case %d: %d\n", kase, num);
+}
+
+int main(void)
+{
+    int n, d;
+    for(int kase=0; scanf("%d %d", &n, &d), n||d; )
+        work(n, d, d*d, ++kase);
+    return 0;
+}
