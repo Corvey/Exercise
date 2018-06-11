@@ -1,0 +1,17 @@
+#include <cstdio>
+int main(void)
+{
+    int s, d, ns, nd, sum;
+    while(~scanf("%d %d", &s, &d))
+    {
+        for(ns = 4, nd = 1; s*ns >= d*nd; --ns, ++nd);
+        ns = ns*2 + (ns>1) + (ns>0);
+        nd = nd*2 + (ns==3) + (nd==5)*2;
+        sum = s*ns - d*nd;
+        if(sum > 0)
+            printf("%d\n", sum);
+        else
+            printf("Deficit\n");
+    }
+    return 0;
+}

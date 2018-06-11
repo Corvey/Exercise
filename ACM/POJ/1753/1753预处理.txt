@@ -1,0 +1,81 @@
+#include <cstdio>
+#include <cstdlib>
+#include <queue>
+#include <string.h>
+using namespace std;
+const int flip[16] = {51200, 58368, 29184, 12544, 35968, 20032, 10016, 4880, 2248, 1252, 626, 305, 140, 78, 39, 19};
+const int done = 65535;
+bool vis[done+1];
+int white[done+1], black[done+1], ans[done+1];
+int input(void)
+{
+    int ans = 0;
+    char str[5];
+    for(int i=0; i<4; ++i)
+    {
+        if(!~scanf("%s", str))
+            exit(0);
+        for(int j=0; j<4; ++j)
+        {
+            ans <<= 1;
+            ans += str[j] == 'b' ? 1 : 0;
+        }
+    }
+    return ans;
+}
+
+void BFS(int x, int* map)
+{
+    memset(vis, 0, sizeof(vis));
+    queue<int> q;
+    vis[x] = true;
+    q.push(x);
+    int temp, t;
+    while(!q.empty())
+    {
+        t = q.front();
+        q.pop();
+        for(int i=0; i<16; ++i)
+        {
+            temp = t ^ flip[i];
+            if(!vis[temp])
+            {
+                map[temp] = t;
+                vis[temp] = true;
+                q.push(temp);
+            }
+        }
+    }
+}
+
+int main(void)
+{
+    memset(white, -1, sizeof(white));
+    memset(black, -1, sizeof(black));
+    white[0] = 0;
+    black[done] = done;
+    BFS(0, white);
+    BFS(done, black);
+    int a, b, t;
+    for(int i=0; i<=done; ++i)
+    {
+        if(!vis[i])
+            ans[i] = -1;
+        else
+        {
+            a = b = 0;
+            for(t = i; ~t && t; t = white[t], ++a);
+            for(t = i; ~t && t != done; t = black[t], ++b);
+            ans[i] = a < b ? a : b;
+        }
+    }
+    int x;
+    while(1)
+    {
+        x = input();
+        if(!~ans[x])
+            printf("Impossible\n");
+        else
+            printf("%d\n", ans[x]);
+    }
+}
