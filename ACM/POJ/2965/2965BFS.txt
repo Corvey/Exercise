@@ -1,0 +1,63 @@
+#include <cstdio>
+#include <string.h>
+#include <queue>
+using namespace std;
+const int flip[16] = {0xF888, 0xF444, 0xF222, 0xF111, 0x8F88, 0x4F44, 0x2F22, 0x1F11, 0x88F8, 0x44F4, 0x22F2, 0x11F1, 0x888F, 0x444F, 0x222F, 0x111F};
+const int N = 65536;
+int cnt[N], path[N], change[N];
+
+void Print(int x)
+{
+    if(x)
+    {
+        Print(path[x]);
+        printf("%d %d\n", change[x]/4+1, change[x]%4+1);
+    }
+}
+
+void BFS(int x)
+{
+    bool vis[N] = {0};
+    memset(cnt, -1, sizeof(cnt));
+    vis[0] = true;
+    cnt[0] = 0;
+    queue<int> q;
+    q.push(0);
+    int top, temp;
+    while(!q.empty())
+    {
+        top = q.front();
+        for(int i=0; i<16; ++i)
+        {
+            temp = top ^ flip[i];
+            if(!vis[temp])
+            {
+                cnt[temp] = cnt[top] + 1;
+                path[temp] = top;
+                change[temp] = i;
+                if(temp == x)
+                {
+                    printf("%d\n", cnt[x]);
+                    Print(x);
+                    return ;
+                }
+                vis[temp] = true;
+                q.push(temp);
+            }
+        }
+        q.pop();
+    }
+}
+
+int main(void)
+{
+    int x = 0;
+    for(int i=0; i<4; ++i)
+    {
+        for(int j=0; j<4; ++j)
+            x = (x << 1) + (getchar() == '+' ? 1 : 0);
+        getchar();
+    }
+    BFS(x);
+    return 0;
+}
