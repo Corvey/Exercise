@@ -1,0 +1,20 @@
+#include <cstdio>
+const int flip[] = {0xF888, 0xF444, 0xF222, 0xF111, 0x8F88, 0x4F44, 0x2F22, 0x1F11, 0x88F8, 0x44F4, 0x22F2, 0x11F1, 0x888F, 0x444F, 0x222F, 0x111F};
+int main(void)
+{
+    int x = 0, num = 0;
+    for(int i=0; i<16; )
+    {
+        for(int j=0; j<4; ++j, ++i)
+            if(getchar() == '+')
+                x ^= flip[i];
+        getchar();
+    }
+    for(int temp = x; temp; temp>>=1)
+        if(temp&1)
+            ++num;
+    printf("%d\n", num);
+    for(int i=15; ~i; --i, x>>=1)
+        if(x&1)
+            printf("%d %d\n", (i>>2)+1, (i&3)+1);
+}
